@@ -5,7 +5,9 @@ import styled from 'styled-components';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 import { ListItem, Icon, Button, Text } from 'react-native-elements';
 
-import { color, DevBorder } from '../../Public/components/Layout';
+import { color, PrimaryButton } from '../../Public/components/Layout';
+
+import SplashScreen from 'react-native-splash-screen';
 
 const MainContainer = styled(View)`
   background-color: #ffffff;
@@ -43,6 +45,9 @@ const ListDivider = styled(View)`
 `;
 
 class Home extends Component {
+  componentDidMount() {
+    SplashScreen.hide();
+  }
   render() {
     return (
       <Fragment>
@@ -154,7 +159,7 @@ class Home extends Component {
                 <ListItem
                   containerStyle={styles.padding0}
                   title={
-                    <Button
+                    <PrimaryButton
                       title="Find Bus Tickets"
                       buttonStyle={styles.button}
                       containerStyle={styles.buttonContainer}
@@ -172,10 +177,7 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
   listItemContainer: { marginHorizontal: 6, paddingHorizontal: 4 },
-  buttonContainer: { elevation: 1 },
-  button: { backgroundColor: color.Primary },
   iconContainer: { margin: 0, padding: 0 },
-  listItemRightContentContainer: {},
   text: { fontSize: 16 },
   padding0: { padding: 0 },
   imageBackground: { width: '100%', height: 150 }

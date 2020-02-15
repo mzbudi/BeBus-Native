@@ -4,9 +4,12 @@ import { View, Text } from 'react-native';
 
 class Account extends Component {
   render() {
+    const { navigation } = this.props;
     return (
       <View>
-        <Text>Account</Text>
+        <Text onPress={() => navigation.navigate('Auth')}>
+          Login / Register
+        </Text>
       </View>
     );
   }

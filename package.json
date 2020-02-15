@@ -17,6 +17,7 @@
     "native-base": "^2.13.8",
     "qs": "^6.9.1",
     "react": "16.9.0",
+    "react-hook-form": "^4.9.3",
     "react-native": "0.61.5",
     "react-native-dotenv": "^0.2.0",
     "react-native-elements": "^1.2.7",
@@ -35,7 +36,8 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-promise-middleware": "^6.1.2",
-    "styled-components": "^5.0.1"
+    "styled-components": "^5.0.1",
+    "yup": "^0.28.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

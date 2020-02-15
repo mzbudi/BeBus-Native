@@ -40,8 +40,7 @@ const HomeScreen = createStackNavigator(
   {
     defaultNavigationOptions: {
       headerTitleAlign: 'center'
-    },
-    headerMode: 'float'
+    }
   }
 );
 
