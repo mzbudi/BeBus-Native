@@ -1,34 +1,45 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { View, TextInput, ImageBackground } from 'react-native';
+import { View, TextInput, ImageBackground, StyleSheet } from 'react-native';
 import styled from 'styled-components';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+// import Icon from 'react-native-vector-icons/MaterialIcons';
+import { ListItem, Icon, Button, Text } from 'react-native-elements';
 
-import { Text, color, DevBorder, Button } from '../../Public/components/Layout';
+import { color, DevBorder } from '../../Public/components/Layout';
 
 const MainContainer = styled(View)`
   background-color: #ffffff;
   height: 100%;
-  ${DevBorder}
 `;
 
 const ListContainer = styled(View)`
-  ${DevBorder}
+  padding-vertical: 8px;
+  padding-horizontal: 8px;
 `;
 
-const ListItem = styled(View)`
+const ListContent = styled(View)`
   flex-direction: row;
-  padding-horizontal: 8px;
-  ${DevBorder}
 `;
 
 const ItemIcon = styled(View)`
   align-self: center;
 `;
 
-const ItemForm = styled(View)`
+const FlexItem = styled(View)`
   flex: 1;
-  ${DevBorder}
+`;
+
+const Flex1 = styled(View)`
+  flex: 1;
+`;
+
+const FlexRow = styled(View)`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const ListDivider = styled(View)`
+  padding-top: 10px;
 `;
 
 class Home extends Component {
@@ -38,56 +49,137 @@ class Home extends Component {
         <MainContainer>
           <ImageBackground
             source={require('../../../assets/images/bus1.jpg')}
-            style={{ width: '100%', height: 150 }}
+            style={styles.imageBackground}
           />
           <ListContainer>
-            <ListItem>
+            <ListContent>
               <ItemIcon>
-                <Text color={color.Primary}>
-                  <Icon name="import-export" size={40} />
-                </Text>
+                <Icon
+                  name="import-export"
+                  size={40}
+                  type="material"
+                  color={color.Primary}
+                />
               </ItemIcon>
-              <View>
+              <FlexItem>
                 <View>
-                  <View>
-                    <Text>Leaving from</Text>
-                  </View>
-                  <View>
-                    <Text>Going to</Text>
-                  </View>
+                  <ListItem
+                    title="Leaving from"
+                    subtitle="Departure City"
+                    containerStyle={styles.listItemContainer}
+                    bottomDivider
+                    chevron={{ color: color.Primary, size: 40 }}
+                  />
+                </View>
+                <View>
+                  <ListItem
+                    title="Going to"
+                    subtitle="Arrival City"
+                    containerStyle={styles.listItemContainer}
+                    bottomDivider
+                    chevron={{ color: color.Primary, size: 40 }}
+                  />
                 </View>
                 <View>
                   <ItemIcon name="arrow-back" />
                 </View>
-              </View>
-            </ListItem>
-            <ListItem>
+              </FlexItem>
+            </ListContent>
+            <ListContent>
               <ItemIcon>
-                <Text color={color.Secondary}>
-                  <Icon name="date-range" size={40} />
-                </Text>
+                <Icon
+                  name="date-range"
+                  size={40}
+                  type="material"
+                  color={color.Secondary}
+                />
               </ItemIcon>
-              <View>
-                <Text>Departure</Text>
-              </View>
-            </ListItem>
-            <ListItem>
+              <FlexItem>
+                <ListItem
+                  title="Departure"
+                  subtitle="Fri, Feb 14, 2020"
+                  containerStyle={styles.listItemContainer}
+                  bottomDivider
+                  chevron={{ color: color.Primary, size: 40 }}
+                />
+              </FlexItem>
+            </ListContent>
+            <ListContent>
               <ItemIcon>
-                <Text color={color.Secondary}>
-                  <Icon name="person" size={40} />
-                </Text>
+                <Icon
+                  name="person"
+                  size={40}
+                  type="material"
+                  color={color.Secondary}
+                />
               </ItemIcon>
-              <View>
-                <Text>Passager</Text>
-              </View>
-            </ListItem>
+              <FlexItem>
+                <ListItem
+                  title="Passengers"
+                  subtitle=""
+                  rightContentContainerStyle={
+                    styles.listItemRightContentContainer
+                  }
+                  rightSubtitle={
+                    <FlexRow>
+                      <Icon
+                        name="minus"
+                        size={10}
+                        type="font-awesome"
+                        color={color.Primary}
+                        containerStyle={styles.iconContainer}
+                        reverse
+                      />
+                      <Text style={styles.text}>1</Text>
+                      <Icon
+                        name="plus"
+                        size={10}
+                        type="font-awesome"
+                        color={color.Primary}
+                        containerStyle={styles.iconContainer}
+                        reverse
+                      />
+                    </FlexRow>
+                  }
+                  containerStyle={styles.listItemContainer}
+                  bottomDivider
+                />
+              </FlexItem>
+            </ListContent>
+            <ListDivider />
+            <ListDivider />
+            <ListDivider />
+            <ListContent>
+              <FlexItem>
+                <ListItem
+                  containerStyle={styles.padding0}
+                  title={
+                    <Button
+                      title="Find Bus Tickets"
+                      buttonStyle={styles.button}
+                      containerStyle={styles.buttonContainer}
+                    />
+                  }
+                />
+              </FlexItem>
+            </ListContent>
           </ListContainer>
-          <Button>Find Bus Tickets</Button>
         </MainContainer>
       </Fragment>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  listItemContainer: { marginHorizontal: 6, paddingHorizontal: 4 },
+  buttonContainer: { elevation: 1 },
+  button: { backgroundColor: color.Primary },
+  iconContainer: { margin: 0, padding: 0 },
+  listItemRightContentContainer: {},
+  text: { fontSize: 16 },
+  padding0: { padding: 0 },
+  imageBackground: { width: '100%', height: 150 }
+});
 
 const mapStateToProps = state => {
   return {};

@@ -28,7 +28,7 @@ const StyledButton = styled(TouchableOpacity)`
 
 const Button = props => {
   return (
-    <StyledButton>
+    <StyledButton activeOpacity={0.5}>
       <Text color={color.TextSecondary} bold center>
         {props.children}
       </Text>
