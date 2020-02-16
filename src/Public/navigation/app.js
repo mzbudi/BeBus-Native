@@ -13,7 +13,7 @@ import Notification from '../../App/Account/Notification';
 import History from '../../App/History';
 import Schedule from '../../App/Schedule';
 import Recommendation from '../../App/Recommendation';
-import SearchStation from '../../App/Home/SearchStation/';
+import SearchStation from '../../App/Home/SearchStation';
 import TripDetail from '../../App/History/TripDetail';
 
 import Login from '../../Auth/Login';
@@ -97,7 +97,7 @@ const AccountScreen = createStackNavigator(
     },
     ContactInfo: {
       screen: ContactInfo,
-      ...navigationOptions('My Contact Informations')
+      ...navigationOptions('My Contact Information')
     },
     ChangePassword: {
       screen: ChangePassword,
@@ -105,7 +105,7 @@ const AccountScreen = createStackNavigator(
     },
     Notification: {
       screen: Notification,
-      ...navigationOptions('My Notifications')
+      ...navigationOptions('My Notification')
     },
     Login: {
       screen: Login,
