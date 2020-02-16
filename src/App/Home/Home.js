@@ -1,12 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native';
 import styled from 'styled-components';
 import { ListItem, Icon, Text } from 'react-native-elements';
 import ModalDatePicker from '../../Public/components/ModalDatePicker';
 import moment from 'moment';
-
-import { color, PrimaryButton } from '../../Public/components/Layout';
 
 import SplashScreen from 'react-native-splash-screen';
 
@@ -46,7 +49,7 @@ class Home extends Component {
   state = {
     calendarVisible: false,
     date: null
-  }
+  };
   componentDidMount() {
     SplashScreen.hide();
   }
@@ -54,29 +57,29 @@ class Home extends Component {
   handleCloseModal = () => {
     this.setState({
       calendarVisible: false
-    })
-  }
+    });
+  };
 
   handleCity = () => {
     this.props.navigation.navigate('SearchStation');
-  }
+  };
 
-  chooseDate = (chooseDate) => {
+  chooseDate = chooseDate => {
     this.setState({
       date: chooseDate,
       calendarVisible: false
-    })
-  }
+    });
+  };
 
   handleModal = () => {
     this.setState({
       calendarVisible: true
-    })
-  }
+    });
+  };
 
   render() {
     const { calendarVisible, date } = this.state;
-    const dateConverted = date ? moment(date).format("MMM Do YYYY") : '';
+    const dateConverted = date ? moment(date).format('MMM Do YYYY') : '';
     return (
       <Fragment>
         <MainContainer>
@@ -88,7 +91,7 @@ class Home extends Component {
             <ListContent>
               <ItemIcon>
                 <Icon
-                  name='import-export'
+                  name="import-export"
                   size={40}
                   type="material"
                   color={color.Primary}
@@ -97,7 +100,9 @@ class Home extends Component {
               <FlexItem>
                 <View>
                   <ListItem
-                    onPress={() => { this.handleCity() }}
+                    onPress={() => {
+                      this.handleCity();
+                    }}
                     title="Leaving from"
                     subtitle="Departure City"
                     containerStyle={styles.listItemContainer}
@@ -107,7 +112,9 @@ class Home extends Component {
                 </View>
                 <View>
                   <ListItem
-                    onPress={() => { this.handleCity() }}
+                    onPress={() => {
+                      this.handleCity();
+                    }}
                     title="Going to"
                     subtitle="Arrival City"
                     containerStyle={styles.listItemContainer}
@@ -122,7 +129,10 @@ class Home extends Component {
             </ListContent>
             <ListContent>
               <ItemIcon>
-                <TouchableOpacity onPress={() => { this.handleModal() }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.handleModal();
+                  }}>
                   <Icon
                     name="date-range"
                     size={40}
@@ -133,13 +143,15 @@ class Home extends Component {
               </ItemIcon>
               <FlexItem>
                 <ListItem
-                  onPress={() => { this.handleModal() }}
+                  onPress={() => {
+                    this.handleModal();
+                  }}
                   title="Departure"
                   subtitle={dateConverted ? dateConverted : ''}
                   containerStyle={styles.listItemContainer}
                   bottomDivider
                   chevron={{ color: color.Primary, size: 40 }}
-                ></ListItem>
+                />
               </FlexItem>
             </ListContent>
             <ListContent>
@@ -205,7 +217,8 @@ class Home extends Component {
           <ModalDatePicker
             calendarVisible={calendarVisible}
             functionVisible={this.handleCloseModal.bind(this)}
-            chooseDate={this.chooseDate.bind(this)} />
+            chooseDate={this.chooseDate.bind(this)}
+          />
         </MainContainer>
       </Fragment>
     );
