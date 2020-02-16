@@ -61,7 +61,7 @@ class Account extends Component {
                 marginVertical: -12
               }}
               leftIcon={<Icon name="person" type="material" color="#666666" />}
-              title="My Contact Informations"
+              title="My Contact Information"
               onPress={() => navigation.navigate('ContactInfo')}
             />
             <ListItem
@@ -85,7 +85,7 @@ class Account extends Component {
                 marginVertical: -12
               }}
               leftIcon={<Icon name="mail" type="material" color="#666666" />}
-              title="My Notifications"
+              title="My Notification"
               onPress={() => navigation.navigate('Notification')}
             />
             <ListItem

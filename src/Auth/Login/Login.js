@@ -11,6 +11,9 @@ import {
   PrimaryButton,
   color
 } from '../../Public/components/Layout';
+import { Toast } from '../../Public/components/Toast';
+
+import { networkcheck } from '../../Public/helper/networkcheck';
 
 import { actionLoginRequest } from '../../Public/redux/action/auth';
 
@@ -50,9 +53,16 @@ const Login = props => {
       username,
       password
     };
-    await loginRequest(payload).then(() => {
-      navigation.navigate('Home');
-    });
+    try {
+      await loginRequest(payload).then(() => {
+        navigation.navigate('Home');
+      });
+    } catch ({ response }) {
+      networkcheck();
+      if (response && response.data.error) {
+        Toast(response.data.error);
+      }
+    }
   };
 
   return (

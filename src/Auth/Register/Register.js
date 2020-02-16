@@ -11,6 +11,9 @@ import {
   PrimaryButton,
   color
 } from '../../Public/components/Layout';
+import { Toast } from '../../Public/components/Toast';
+
+import { networkcheck } from '../../Public/helper/networkcheck';
 
 import { actionPostRegister } from '../../Public/redux/action/auth';
 
@@ -28,7 +31,13 @@ const RegisterSchema = yup.object().shape({
     .email()
     .required(),
   name: yup.string().required(),
-  phone: yup.number().typeError('Invalid number')
+  phone: yup.lazy(value => {
+    if (value !== undefined && value !== '') {
+      return yup.number().typeError('invalid number');
+    } else {
+      return yup.mixed().notRequired();
+    }
+  })
 });
 
 const defaultValues = {
@@ -60,7 +69,16 @@ const Register = props => {
       email,
       phone
     };
-    await postRegister(payload);
+    try {
+      await postRegister(payload).then(() => {
+        navigation.navigate('Login');
+      });
+    } catch ({ response }) {
+      networkcheck();
+      if (response && response.data.error) {
+        Toast(response.data.error);
+      }
+    }
   };
 
   return (
@@ -135,7 +153,7 @@ const Register = props => {
         title={
           <Input
             inputContainerStyle={styles.inputContainer}
-            placeholder="Phone"
+            placeholder="Phone (Optional)"
             ref={register({ name: 'phone' })}
             errorMessage={errors.phone ? errors.phone.message : ''}
             onChangeText={text => setValue('phone', text, true)}
