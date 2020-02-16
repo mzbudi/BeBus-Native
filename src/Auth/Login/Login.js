@@ -119,7 +119,11 @@ const Login = props => {
         title={
           <PrimaryButton
             title="Create Account"
-            onPress={() => navigation.navigate('Register')}
+            onPress={() =>
+              navigation.state.routeName === 'AuthLogin'
+                ? navigation.navigate('AuthRegister')
+                : navigation.navigate('Register')
+            }
           />
         }
       />

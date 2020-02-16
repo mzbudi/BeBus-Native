@@ -10,8 +10,8 @@ const switchNavigator = createSwitchNavigator(
     App
   },
   {
-    // initialRouteName: 'Main',
-    initialRouteName: 'App'
+    initialRouteName: 'Main'
+    // initialRouteName: 'App'
   }
 );
 

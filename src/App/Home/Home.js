@@ -3,14 +3,13 @@ import { connect } from 'react-redux';
 import { View, ImageBackground, StyleSheet } from 'react-native';
 import styled from 'styled-components';
 import { ListItem, Icon, Text } from 'react-native-elements';
+import SplashScreen from 'react-native-splash-screen';
 
 import {
   color,
   PrimaryButton,
   MainContainer
 } from '../../Public/components/Layout';
-
-import SplashScreen from 'react-native-splash-screen';
 
 const ListContainer = styled(View)`
   padding-vertical: 8px;
