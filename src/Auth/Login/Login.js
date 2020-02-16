@@ -21,13 +21,16 @@ const defaultValues = {
 };
 
 const Login = props => {
-  const { loginRequest, navigation } = props;
+  const { auth, loginRequest, navigation } = props;
   const [visible, setVisible] = useState(true);
-
   const { register, handleSubmit, setValue, errors, getValues } = useForm({
     defaultValues,
     validationSchema: LoginSchema
   });
+
+  if (auth.data.token) {
+    navigation.navigate('Account');
+  }
 
   const toggleVisible = () => {
     setVisible(!visible);
@@ -123,7 +126,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    auth: state.auth
+  };
 };
 
 const mapDispatchToProps = dispatch => ({
