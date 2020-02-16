@@ -3,7 +3,8 @@ import {
   View,
   Text as RNText,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  ScrollView
 } from 'react-native';
 import styled from 'styled-components';
 import { ListItem, Icon, Button, Text } from 'react-native-elements';
@@ -19,11 +20,6 @@ const DevBorder = 'border-width: 1px;';
 
 const ListDivider = styled(View)`
   padding-top: 10px;
-`;
-
-const MainContainer = styled(View)`
-  background-color: #ffffff;
-  height: 100%;
 `;
 
 const PrimaryButton = props => {
@@ -44,5 +40,9 @@ const styles = StyleSheet.create({
     elevation: 1
   }
 });
+
+const MainContainer = styled(ScrollView)`
+  background-color: #ffffff;
+`;
 
 export { color, DevBorder, Text, ListDivider, MainContainer, PrimaryButton };

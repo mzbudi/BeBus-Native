@@ -23,4 +23,10 @@ const actionPostRegister = payload => {
   };
 };
 
-export { actionLoginRequest, actionPostRegister };
+const actionLogoutRequest = () => {
+  return {
+    type: 'LOGOUT_REQUEST'
+  };
+};
+
+export { actionLoginRequest, actionPostRegister, actionLogoutRequest };

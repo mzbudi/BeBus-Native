@@ -10,10 +10,11 @@ import { color, PrimaryButton } from '../../Public/components/Layout';
 
 import SplashScreen from 'react-native-splash-screen';
 
-const MainContainer = styled(ScrollView)`
-  background-color: #ffffff;
-  height: 100%;
-`;
+import {
+  color,
+  PrimaryButton,
+  MainContainer
+} from '../../Public/components/Layout';
 
 const ListContainer = styled(View)`
   padding-vertical: 8px;

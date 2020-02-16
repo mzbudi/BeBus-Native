@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { ScrollView, Text, StyleSheet } from 'react-native';
-import { ListItem, Icon, Input } from 'react-native-elements';
+import { ScrollView, StyleSheet } from 'react-native';
+import { ListItem, Icon, Text, Input } from 'react-native-elements';
 
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { ListDivider, PrimaryButton } from '../../Public/components/Layout';
+import {
+  ListDivider,
+  PrimaryButton,
+  color
+} from '../../Public/components/Layout';
+import { Toast } from '../../Public/components/Toast';
+
+import { networkcheck } from '../../Public/helper/networkcheck';
 
 import { actionLoginRequest } from '../../Public/redux/action/auth';
 
@@ -36,15 +43,26 @@ const Login = props => {
     setVisible(!visible);
   };
 
+  const handleChange = field => {
+    return text => setValue(field, text, true);
+  };
+
   const onSubmit = async () => {
     const { username, password } = getValues();
     const payload = {
       username,
       password
     };
-    await loginRequest(payload).then(() => {
-      navigation.navigate('Home');
-    });
+    try {
+      await loginRequest(payload).then(() => {
+        navigation.navigate('Home');
+      });
+    } catch ({ response }) {
+      networkcheck();
+      if (response && response.data.error) {
+        Toast(response.data.error);
+      }
+    }
   };
 
   return (
@@ -58,7 +76,7 @@ const Login = props => {
             placeholder="Username"
             ref={register({ name: 'username' })}
             errorMessage={errors.username ? errors.username.message : ''}
-            onChangeText={text => setValue('username', text, true)}
+            onChangeText={handleChange('username')}
           />
         }
       />
@@ -70,7 +88,7 @@ const Login = props => {
             placeholder="Password"
             ref={register({ name: 'password' })}
             errorMessage={errors.password ? errors.password.message : ''}
-            onChangeText={text => setValue('password', text, true)}
+            onChangeText={handleChange('password')}
             rightIcon={
               <Icon
                 name={visible ? 'visibility-off' : 'visibility'}
@@ -101,13 +119,28 @@ const Login = props => {
         title={
           <PrimaryButton
             title="Create Account"
-            onPress={() => navigation.navigate('Register')}
+            onPress={() =>
+              navigation.state.routeName === 'AuthLogin'
+                ? navigation.navigate('AuthRegister')
+                : navigation.navigate('Register')
+            }
           />
         }
       />
     </ScrollView>
   );
 };
+
+Login.navigationOptions = ({ navigation }) => ({
+  headerRight: () =>
+    navigation.state.routeName === 'AuthLogin' ? (
+      <Text
+        style={styles.headerRightText}
+        onPress={() => navigation.navigate('Home')}>
+        Skip
+      </Text>
+    ) : null
+});
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -122,6 +155,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     height: '100%',
     paddingHorizontal: 4
+  },
+  headerRightText: {
+    color: color.TextSecondary,
+    fontSize: 16,
+    marginHorizontal: 16
   }
 });
 

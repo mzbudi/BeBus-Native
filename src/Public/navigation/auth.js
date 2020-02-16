@@ -1,6 +1,7 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import Login from '../../Auth/Login';
 import Register from '../../Auth/Register';
+import ForgotPassword from '../../Auth/ForgotPassword';
 
 import { color } from '../components/Layout';
 
@@ -19,13 +20,17 @@ const navigationOptions = title => {
 
 export default createStackNavigator(
   {
-    Login: {
+    AuthLogin: {
       screen: Login,
       ...navigationOptions('Login')
     },
-    Register: {
+    AuthRegister: {
       screen: Register,
       ...navigationOptions('Register')
+    },
+    ForgotPassword: {
+      screen: ForgotPassword,
+      ...navigationOptions('Forget Password')
     }
   },
   {
