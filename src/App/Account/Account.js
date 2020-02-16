@@ -27,13 +27,18 @@ class Account extends Component {
               : require('../../../assets/images/avatar-placeholder.jpg'),
             containerStyle: styles.avatarContainer
           }}
-          title={auth.data.token ? auth.data.user_email : 'Login/Register'}
-          titleStyle={styles.fontWhite}
-          titleProps={
-            !auth.data.token
-              ? { onPress: () => navigation.navigate('Login') }
-              : {}
-          }
+          {...(auth.data.token && auth.data.user_name
+            ? {
+                title: auth.data.user_name,
+                titleStyle: styles.fontWhite,
+                subtitle: auth.data.user_email,
+                subtitleStyle: styles.fontWhite
+              }
+            : {
+                title: 'Login/Register',
+                titleStyle: styles.fontWhite,
+                titleProps: { onPress: () => navigation.navigate('Login') }
+              })}
         />
         {auth.data.token ? (
           <Fragment>
