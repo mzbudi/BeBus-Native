@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, ImageBackground, StyleSheet } from 'react-native';
+import { View, ScrollView, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { ListItem, Icon, Text } from 'react-native-elements';
+import ModalDatePicker from '../../Public/components/ModalDatePicker';
+import moment from 'moment';
 
 import { color, PrimaryButton } from '../../Public/components/Layout';
 
@@ -40,10 +42,40 @@ const ListDivider = styled(View)`
 `;
 
 class Home extends Component {
+  state = {
+    calendarVisible: false,
+    date: null
+  }
   componentDidMount() {
     SplashScreen.hide();
   }
+
+  handleCloseModal = () => {
+    this.setState({
+      calendarVisible: false
+    })
+  }
+
+  handleCity = () => {
+    this.props.navigation.navigate('SearchStation');
+  }
+
+  chooseDate = (chooseDate) => {
+    this.setState({
+      date: chooseDate,
+      calendarVisible: false
+    })
+  }
+
+  handleModal = () => {
+    this.setState({
+      calendarVisible: true
+    })
+  }
+
   render() {
+    const { calendarVisible, date } = this.state;
+    const dateConverted = date ? moment(date).format("MMM Do YYYY") : '';
     return (
       <Fragment>
         <MainContainer>
@@ -55,7 +87,7 @@ class Home extends Component {
             <ListContent>
               <ItemIcon>
                 <Icon
-                  name="import-export"
+                  name='import-export'
                   size={40}
                   type="material"
                   color={color.Primary}
@@ -64,6 +96,7 @@ class Home extends Component {
               <FlexItem>
                 <View>
                   <ListItem
+                    onPress={() => { this.handleCity() }}
                     title="Leaving from"
                     subtitle="Departure City"
                     containerStyle={styles.listItemContainer}
@@ -73,6 +106,7 @@ class Home extends Component {
                 </View>
                 <View>
                   <ListItem
+                    onPress={() => { this.handleCity() }}
                     title="Going to"
                     subtitle="Arrival City"
                     containerStyle={styles.listItemContainer}
@@ -87,21 +121,24 @@ class Home extends Component {
             </ListContent>
             <ListContent>
               <ItemIcon>
-                <Icon
-                  name="date-range"
-                  size={40}
-                  type="material"
-                  color={color.Secondary}
-                />
+                <TouchableOpacity onPress={() => { this.handleModal() }}>
+                  <Icon
+                    name="date-range"
+                    size={40}
+                    type="material"
+                    color={color.Secondary}
+                  />
+                </TouchableOpacity>
               </ItemIcon>
               <FlexItem>
                 <ListItem
+                  onPress={() => { this.handleModal() }}
                   title="Departure"
-                  subtitle="Fri, Feb 14, 2020"
+                  subtitle={dateConverted ? dateConverted : ''}
                   containerStyle={styles.listItemContainer}
                   bottomDivider
                   chevron={{ color: color.Primary, size: 40 }}
-                />
+                ></ListItem>
               </FlexItem>
             </ListContent>
             <ListContent>
@@ -164,6 +201,10 @@ class Home extends Component {
               </FlexItem>
             </ListContent>
           </ListContainer>
+          <ModalDatePicker
+            calendarVisible={calendarVisible}
+            functionVisible={this.handleCloseModal.bind(this)}
+            chooseDate={this.chooseDate.bind(this)} />
         </MainContainer>
       </Fragment>
     );
