@@ -41,12 +41,15 @@ const defaultValues = {
 };
 
 const Register = props => {
-  const { postRegister, navigation } = props;
-
+  const { auth, postRegister, navigation } = props;
   const { register, handleSubmit, setValue, errors, getValues } = useForm({
     defaultValues,
     validationSchema: RegisterSchema
   });
+
+  if (auth.data.token) {
+    navigation.navigate('Account');
+  }
 
   const onSubmit = async () => {
     const { username, password, name, email, phone } = getValues();
@@ -189,7 +192,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    auth: state.auth
+  };
 };
 
 const mapDispatchToProps = dispatch => ({

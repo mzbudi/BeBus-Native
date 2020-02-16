@@ -7,10 +7,12 @@ import { color } from '../components/Layout';
 
 import Home from '../../App/Home';
 import Account from '../../App/Account';
+import ContactInfo from '../../App/Account/ContactInfo';
+import ChangePassword from '../../App/Account/ChangePassword';
+import Notification from '../../App/Account/Notification';
 import History from '../../App/History';
 import Schedule from '../../App/Schedule';
 import Recommendation from '../../App/Recommendation';
-import ForgotPassword from '../../App/ForgotPassword';
 
 import Login from '../../Auth/Login';
 import Register from '../../Auth/Register';
@@ -20,6 +22,7 @@ const navigationOptions = title => {
     navigationOptions: {
       title: title,
       headerStyle: {
+        elevation: 0,
         height: 50,
         backgroundColor: color.Primary
       },
@@ -80,15 +83,23 @@ const AccountScreen = createStackNavigator(
   {
     Account: {
       screen: Account,
-      ...navigationOptions('Account')
+      ...navigationOptions('My Account')
+    },
+    ContactInfo: {
+      screen: ContactInfo,
+      ...navigationOptions('My Contact Informations')
+    },
+    ChangePassword: {
+      screen: ChangePassword,
+      ...navigationOptions('Change Password')
+    },
+    Notification: {
+      screen: Notification,
+      ...navigationOptions('My Notifications')
     },
     Login: {
       screen: Login,
       ...navigationOptions('Login')
-    },
-    ForgotPassword: {
-      screen: ForgotPassword,
-      ...navigationOptions('Forget Password')
     },
     Register: {
       screen: Register,

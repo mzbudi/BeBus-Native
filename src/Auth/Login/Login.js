@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { ScrollView, Text, StyleSheet } from 'react-native';
-import { ListItem, Icon, Input } from 'react-native-elements';
+import { ScrollView, StyleSheet } from 'react-native';
+import { ListItem, Icon, Text, Input } from 'react-native-elements';
 
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { ListDivider, PrimaryButton } from '../../Public/components/Layout';
+import {
+  ListDivider,
+  PrimaryButton,
+  color
+} from '../../Public/components/Layout';
 
 import { actionLoginRequest } from '../../Public/redux/action/auth';
 
@@ -36,6 +40,10 @@ const Login = props => {
     setVisible(!visible);
   };
 
+  const handleChange = field => {
+    return text => setValue(field, text, true);
+  };
+
   const onSubmit = async () => {
     const { username, password } = getValues();
     const payload = {
@@ -58,7 +66,7 @@ const Login = props => {
             placeholder="Username"
             ref={register({ name: 'username' })}
             errorMessage={errors.username ? errors.username.message : ''}
-            onChangeText={text => setValue('username', text, true)}
+            onChangeText={handleChange('username')}
           />
         }
       />
@@ -70,7 +78,7 @@ const Login = props => {
             placeholder="Password"
             ref={register({ name: 'password' })}
             errorMessage={errors.password ? errors.password.message : ''}
-            onChangeText={text => setValue('password', text, true)}
+            onChangeText={handleChange('password')}
             rightIcon={
               <Icon
                 name={visible ? 'visibility-off' : 'visibility'}
@@ -109,6 +117,17 @@ const Login = props => {
   );
 };
 
+Login.navigationOptions = ({ navigation }) => ({
+  headerRight: () =>
+    navigation.state.routeName === 'AuthLogin' ? (
+      <Text
+        style={styles.headerRightText}
+        onPress={() => navigation.navigate('Home')}>
+        Skip
+      </Text>
+    ) : null
+});
+
 const styles = StyleSheet.create({
   inputContainer: {
     borderColor: '#bababa'
@@ -122,6 +141,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     height: '100%',
     paddingHorizontal: 4
+  },
+  headerRightText: {
+    color: color.TextSecondary,
+    fontSize: 16,
+    marginHorizontal: 16
   }
 });
 

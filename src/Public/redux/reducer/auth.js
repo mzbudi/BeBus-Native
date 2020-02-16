@@ -9,13 +9,15 @@ const auth = (state = initialState, action) => {
     case 'LOGIN_REQUEST_PENDING':
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        error: null
       };
     case 'LOGIN_REQUEST_FULFILLED':
       return {
         ...state,
         isLoading: false,
-        data: action.payload
+        data: action.payload,
+        error: null
       };
     case 'LOGIN_REQUEST_REJECTED':
       return {
@@ -26,18 +28,24 @@ const auth = (state = initialState, action) => {
     case 'POST_REGISTER_PENDING':
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        error: null
       };
     case 'POST_REGISTER_FULFILLED':
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        error: null
       };
     case 'POST_REGISTER_REJECTED':
       return {
         ...state,
         isLoading: false,
         error: action.payload.response
+      };
+    case 'LOGOUT_REQUEST':
+      return {
+        ...initialState
       };
     default:
       return state;

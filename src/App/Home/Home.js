@@ -1,17 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, ImageBackground, StyleSheet } from 'react-native';
+import { View, ImageBackground, StyleSheet } from 'react-native';
 import styled from 'styled-components';
 import { ListItem, Icon, Text } from 'react-native-elements';
 
-import { color, PrimaryButton } from '../../Public/components/Layout';
+import {
+  color,
+  PrimaryButton,
+  MainContainer
+} from '../../Public/components/Layout';
 
 import SplashScreen from 'react-native-splash-screen';
-
-const MainContainer = styled(ScrollView)`
-  background-color: #ffffff;
-  height: 100%;
-`;
 
 const ListContainer = styled(View)`
   padding-vertical: 8px;
