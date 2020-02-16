@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import {
   View,
-  ScrollView,
   ImageBackground,
   StyleSheet,
   TouchableOpacity
@@ -11,8 +10,6 @@ import styled from 'styled-components';
 import { ListItem, Icon, Text } from 'react-native-elements';
 import ModalDatePicker from '../../Public/components/ModalDatePicker';
 import moment from 'moment';
-
-import { color, PrimaryButton } from '../../Public/components/Layout';
 
 import SplashScreen from 'react-native-splash-screen';
 

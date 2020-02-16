@@ -13,8 +13,8 @@ import Notification from '../../App/Account/Notification';
 import History from '../../App/History';
 import Schedule from '../../App/Schedule';
 import Recommendation from '../../App/Recommendation';
-import ForgotPassword from '../../App/ForgotPassword';
-import SearchStation from '../../App/Home/SearchStation';
+import SearchStation from '../../App/Home/SearchStation/';
+import TripDetail from '../../App/History/TripDetail';
 
 import Login from '../../Auth/Login';
 import Register from '../../Auth/Register';
@@ -76,6 +76,10 @@ const HistoryScreen = createStackNavigator(
     History: {
       screen: History,
       ...navigationOptions('My Trip')
+    },
+    TripDetail: {
+      screen: TripDetail,
+      ...navigationOptions('Trip Detail')
     }
   },
   {
