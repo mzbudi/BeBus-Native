@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ListItem, Icon, Text, Input } from 'react-native-elements';
 
 import { useForm } from 'react-hook-form';
@@ -9,12 +9,12 @@ import * as yup from 'yup';
 import {
   ListDivider,
   PrimaryButton,
-  color
+  color,
+  WhiteScrollView
 } from '../../Public/components/Layout';
 import { Toast } from '../../Public/components/Toast';
 
 import { networkcheck } from '../../Public/helper/networkcheck';
-
 import { actionLoginRequest } from '../../Public/redux/action/auth';
 
 const LoginSchema = yup.object().shape({
@@ -66,68 +66,72 @@ const Login = props => {
   };
 
   return (
-    <ScrollView style={styles.mainContainer}>
-      <ListDivider />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <Input
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Username"
-            ref={register({ name: 'username' })}
-            errorMessage={errors.username ? errors.username.message : ''}
-            onChangeText={handleChange('username')}
-          />
-        }
-      />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <Input
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Password"
-            ref={register({ name: 'password' })}
-            errorMessage={errors.password ? errors.password.message : ''}
-            onChangeText={handleChange('password')}
-            rightIcon={
-              <Icon
-                name={visible ? 'visibility-off' : 'visibility'}
-                size={25}
-                type="material-ui"
-                onPress={() => toggleVisible()}
-              />
-            }
-            secureTextEntry={visible}
-          />
-        }
-      />
-      <ListItem
-        rightElement={
-          <Text onPress={() => navigation.navigate('ForgotPassword')}>
-            Forgot Password?
-          </Text>
-        }
-      />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={<PrimaryButton title="Login" onPress={handleSubmit(onSubmit)} />}
-      />
-      <ListDivider />
-      <ListDivider />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <PrimaryButton
-            title="Create Account"
-            onPress={() =>
-              navigation.state.routeName === 'AuthLogin'
-                ? navigation.navigate('AuthRegister')
-                : navigation.navigate('Register')
-            }
-          />
-        }
-      />
-    </ScrollView>
+    <WhiteScrollView>
+      <View style={styles.mainContainer}>
+        <ListDivider />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <Input
+              inputContainerStyle={styles.inputContainer}
+              placeholder="Username"
+              ref={register({ name: 'username' })}
+              errorMessage={errors.username ? errors.username.message : ''}
+              onChangeText={handleChange('username')}
+            />
+          }
+        />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <Input
+              inputContainerStyle={styles.inputContainer}
+              placeholder="Password"
+              ref={register({ name: 'password' })}
+              errorMessage={errors.password ? errors.password.message : ''}
+              onChangeText={handleChange('password')}
+              rightIcon={
+                <Icon
+                  name={visible ? 'visibility-off' : 'visibility'}
+                  size={25}
+                  type="material-ui"
+                  onPress={() => toggleVisible()}
+                />
+              }
+              secureTextEntry={visible}
+            />
+          }
+        />
+        <ListItem
+          rightElement={
+            <Text onPress={() => navigation.navigate('ForgotPassword')}>
+              Forgot Password?
+            </Text>
+          }
+        />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <PrimaryButton title="Login" onPress={handleSubmit(onSubmit)} />
+          }
+        />
+        <ListDivider />
+        <ListDivider />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <PrimaryButton
+              title="Create Account"
+              onPress={() =>
+                navigation.state.routeName === 'AuthLogin'
+                  ? navigation.navigate('AuthRegister')
+                  : navigation.navigate('Register')
+              }
+            />
+          }
+        />
+      </View>
+    </WhiteScrollView>
   );
 };
 
@@ -152,8 +156,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4
   },
   mainContainer: {
-    backgroundColor: '#ffffff',
-    height: '100%',
     paddingHorizontal: 4
   },
   headerRightText: {

@@ -41,8 +41,20 @@ const styles = StyleSheet.create({
   }
 });
 
-const MainContainer = styled(ScrollView)`
+const WhiteScrollView = styled(ScrollView)`
   background-color: #ffffff;
 `;
 
-export { color, DevBorder, Text, ListDivider, MainContainer, PrimaryButton };
+const MainContainer = styled(ScrollView)`
+  background-color: #ffffff;
+`; // Deprecated
+
+export {
+  color,
+  DevBorder,
+  Text,
+  ListDivider,
+  WhiteScrollView,
+  PrimaryButton,
+  MainContainer
+};

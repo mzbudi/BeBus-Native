@@ -14,7 +14,7 @@ import History from '../../App/History';
 import Schedule from '../../App/Schedule';
 import Recommendation from '../../App/Recommendation';
 import ForgotPassword from '../../App/ForgotPassword';
-import SearchStation from '../../App/Home/SearchStation/';
+import SearchStation from '../../App/Home/SearchStation';
 
 import Login from '../../Auth/Login';
 import Register from '../../Auth/Register';
