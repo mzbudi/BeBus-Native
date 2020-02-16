@@ -10,6 +10,10 @@ import Account from '../../App/Account';
 import History from '../../App/History';
 import Schedule from '../../App/Schedule';
 import Recommendation from '../../App/Recommendation';
+import ForgotPassword from '../../App/ForgotPassword';
+
+import Login from '../../Auth/Login';
+import Register from '../../Auth/Register';
 
 const navigationOptions = title => {
   return {
@@ -77,6 +81,18 @@ const AccountScreen = createStackNavigator(
     Account: {
       screen: Account,
       ...navigationOptions('Account')
+    },
+    Login: {
+      screen: Login,
+      ...navigationOptions('Login')
+    },
+    ForgotPassword: {
+      screen: ForgotPassword,
+      ...navigationOptions('Forget Password')
+    },
+    Register: {
+      screen: Register,
+      ...navigationOptions('Register')
     }
   },
   {

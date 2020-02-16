@@ -1,15 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { View, TextInput, ImageBackground, StyleSheet } from 'react-native';
+import { View, ScrollView, ImageBackground, StyleSheet } from 'react-native';
 import styled from 'styled-components';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
-import { ListItem, Icon, Button, Text } from 'react-native-elements';
+import { ListItem, Icon, Text } from 'react-native-elements';
 
 import { color, PrimaryButton } from '../../Public/components/Layout';
 
 import SplashScreen from 'react-native-splash-screen';
 
-const MainContainer = styled(View)`
+const MainContainer = styled(ScrollView)`
   background-color: #ffffff;
   height: 100%;
 `;
@@ -28,10 +27,6 @@ const ItemIcon = styled(View)`
 `;
 
 const FlexItem = styled(View)`
-  flex: 1;
-`;
-
-const Flex1 = styled(View)`
   flex: 1;
 `;
 

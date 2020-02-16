@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { ScrollView, Text, StyleSheet } from 'react-native';
 import { ListItem, Icon, Input } from 'react-native-elements';
 
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
+
+import { ListDivider, PrimaryButton } from '../../Public/components/Layout';
+
+import { actionLoginRequest } from '../../Public/redux/action/auth';
 
 const LoginSchema = yup.object().shape({
   username: yup.string().required(),
@@ -17,14 +21,32 @@ const defaultValues = {
 };
 
 const Login = props => {
-  const { navigation } = props;
+  const { loginRequest, navigation } = props;
+  const [visible, setVisible] = useState(true);
 
   const { register, handleSubmit, setValue, errors, getValues } = useForm({
     defaultValues,
     validationSchema: LoginSchema
   });
+
+  const toggleVisible = () => {
+    setVisible(!visible);
+  };
+
+  const onSubmit = async () => {
+    const { username, password } = getValues();
+    const payload = {
+      username,
+      password
+    };
+    await loginRequest(payload).then(() => {
+      navigation.navigate('Home');
+    });
+  };
+
   return (
     <ScrollView style={styles.mainContainer}>
+      <ListDivider />
       <ListItem
         containerStyle={styles.listItemContainer}
         title={
@@ -47,12 +69,39 @@ const Login = props => {
             errorMessage={errors.password ? errors.password.message : ''}
             onChangeText={text => setValue('password', text, true)}
             rightIcon={
-              <Icon name="visibility-off" size={25} type="material-ui" />
+              <Icon
+                name={visible ? 'visibility-off' : 'visibility'}
+                size={25}
+                type="material-ui"
+                onPress={() => toggleVisible()}
+              />
             }
+            secureTextEntry={visible}
           />
         }
       />
-      <Text onPress={() => navigation.navigate('Register')}>Register</Text>
+      <ListItem
+        rightElement={
+          <Text onPress={() => navigation.navigate('ForgotPassword')}>
+            Forgot Password?
+          </Text>
+        }
+      />
+      <ListItem
+        containerStyle={styles.listItemContainer}
+        title={<PrimaryButton title="Login" onPress={handleSubmit(onSubmit)} />}
+      />
+      <ListDivider />
+      <ListDivider />
+      <ListItem
+        containerStyle={styles.listItemContainer}
+        title={
+          <PrimaryButton
+            title="Create Account"
+            onPress={() => navigation.navigate('Register')}
+          />
+        }
+      />
     </ScrollView>
   );
 };
@@ -68,7 +117,8 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     backgroundColor: '#ffffff',
-    height: '100%'
+    height: '100%',
+    paddingHorizontal: 4
   }
 });
 
@@ -76,7 +126,9 @@ const mapStateToProps = state => {
   return {};
 };
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  loginRequest: payload => dispatch(actionLoginRequest(payload))
+});
 
 export default connect(
   mapStateToProps,

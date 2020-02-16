@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { ScrollView, Text, StyleSheet } from 'react-native';
 import { ListItem, Input } from 'react-native-elements';
@@ -62,6 +62,7 @@ const Register = props => {
 
   return (
     <ScrollView style={styles.mainContainer}>
+      <ListDivider />
       <ListItem
         containerStyle={styles.listItemContainer}
         title={
@@ -151,12 +152,19 @@ const Register = props => {
         }
       />
       <ListDivider />
-      <Text>Already have an account?</Text>
-      <Text
-        onPress={() => navigation.navigate('Login')}
-        style={styles.textPrimary}>
-        Login
-      </Text>
+      <ListItem
+        containerStyle={styles.listItemContainer}
+        title={
+          <Text>
+            Already have an account?{' '}
+            <Text
+              onPress={() => navigation.navigate('Login')}
+              style={styles.textPrimary}>
+              Login
+            </Text>
+          </Text>
+        }
+      />
     </ScrollView>
   );
 };
@@ -172,7 +180,8 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     backgroundColor: '#ffffff',
-    height: '100%'
+    height: '100%',
+    paddingHorizontal: 4
   },
   textPrimary: {
     color: color.Primary

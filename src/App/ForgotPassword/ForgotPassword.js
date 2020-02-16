@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 
-class Account extends Component {
+class ForgotPassword extends Component {
   render() {
-    const { navigation } = this.props;
     return (
       <View>
-        <Text onPress={() => navigation.navigate('Login')}>
-          Login / Register
-        </Text>
+        <Text>ForgotPassword</Text>
       </View>
     );
   }
@@ -24,4 +21,4 @@ const mapDispatchToProps = dispatch => ({});
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Account);
+)(ForgotPassword);

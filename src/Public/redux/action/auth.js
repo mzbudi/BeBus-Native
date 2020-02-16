@@ -3,8 +3,8 @@ import qs from 'qs';
 
 import { API_HOST } from 'react-native-dotenv';
 
-const actionLoginRequest = ({ payload }) => {
-  const body = payload;
+const actionLoginRequest = payload => {
+  const body = qs.stringify(payload);
   return {
     type: 'LOGIN_REQUEST',
     payload: axios.post(`${API_HOST}/auth/login`, body).then(({ data }) => {
