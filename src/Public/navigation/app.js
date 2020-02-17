@@ -15,6 +15,7 @@ import Schedule from '../../App/Schedule';
 import Recommendation from '../../App/Recommendation';
 import SearchStation from '../../App/Home/SearchStation';
 import TripDetail from '../../App/History/TripDetail';
+import ScheduleDetail from '../../App/Schedule/ScheduleDetail';
 
 import Login from '../../Auth/Login';
 import Register from '../../Auth/Register';
@@ -48,6 +49,10 @@ const HomeScreen = createStackNavigator(
     SearchStation: {
       screen: SearchStation,
       ...navigationOptions('Search Station')
+    },
+    ScheduleDetail: {
+      screen: ScheduleDetail,
+      ...navigationOptions('ScheduleDetail')
     }
   },
   {

@@ -67,6 +67,9 @@ class Schedule extends Component {
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <ListItem
+              onPress={() => {
+                this.props.navigation.navigate('ScheduleDetail');
+              }}
               bottomDivider
               chevron={{
                 color: color.Secondary,
