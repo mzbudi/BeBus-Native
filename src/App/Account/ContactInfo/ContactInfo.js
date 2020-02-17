@@ -25,7 +25,7 @@ const ContactInfoSchema = yup.object().shape({
     .email()
     .required(),
   phone: yup.lazy(value => {
-    if (value !== undefined && value !== '') {
+    if (value && value !== '' && value !== 'null' && value !== null) {
       return yup.number().typeError('invalid number');
     } else {
       return yup.mixed().notRequired();
@@ -38,7 +38,7 @@ const defaultValues = props => {
   return {
     name: user_name,
     email: user_email,
-    phone: user_phone,
+    phone: user_phone ? user_phone : '',
     ...(user_photo ? { photo: user_photo } : {})
   };
 };
@@ -78,8 +78,8 @@ const ContactInfo = props => {
         Toast(response.error);
       } else {
         const source = { uri: response.uri };
-        if (response.fileSize > 1 * 1024 * 1024) {
-          Toast('Image file size is too large. (max: 1mb)');
+        if (response.fileSize > 3 * 1024 * 1024) {
+          Toast('Image file size is too large. (max: 3mb)');
         } else {
           setAvatar(source);
           setUserPhoto({
@@ -119,7 +119,9 @@ const ContactInfo = props => {
       <ListDivider />
       <View style={styles.headerContainer}>
         <Avatar
-          title={auth.data.user_name[0]}
+          {...(auth.data.user_name
+            ? { title: auth.data.user_name[0].toUpperCase() }
+            : {})}
           size="xlarge"
           source={
             avatar && avatar !== ''
