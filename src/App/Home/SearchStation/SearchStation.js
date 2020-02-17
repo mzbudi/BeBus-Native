@@ -21,7 +21,7 @@ class SearchStation extends Component {
     return (
       <Fragment>
         <SearchBar
-          placeholder="Search Citi or Station..."
+          placeholder="Search City or Station..."
           containerStyle={styles.whiteColor}
           lightTheme
           inputContainerStyle={styles.whiteColor}

@@ -77,6 +77,10 @@ class Home extends Component {
     });
   };
 
+  handleFindBus = () => {
+    this.props.navigation.navigate('Schedule');
+  };
+
   render() {
     const { calendarVisible, date } = this.state;
     const dateConverted = date ? moment(date).format('MMM Do YYYY') : '';
@@ -205,6 +209,9 @@ class Home extends Component {
                   containerStyle={styles.padding0}
                   title={
                     <PrimaryButton
+                      onPress={() => {
+                        this.handleFindBus();
+                      }}
                       title="Find Bus Tickets"
                       buttonStyle={styles.button}
                       containerStyle={styles.buttonContainer}
