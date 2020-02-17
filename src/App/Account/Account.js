@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements';
 
-import { color, MainContainer } from '../../Public/components/Layout';
+import { color, WhiteScrollView } from '../../Public/components/Layout';
 
 import { actionLogoutRequest } from '../../Public/redux/action/auth';
 
@@ -16,15 +16,14 @@ class Account extends Component {
   render() {
     const { auth, navigation } = this.props;
     return (
-      <MainContainer>
+      <WhiteScrollView>
         <ListItem
           containerStyle={styles.listItemAvatar}
           leftAvatar={{
+            ...(auth.data.user_name ? { title: auth.data.user_name[0] } : {}),
             rounded: true,
             size: 50,
-            source: auth.data.user_photo
-              ? { uri: auth.data.user_photo }
-              : require('../../../assets/images/avatar-placeholder.jpg'),
+            source: auth.data.user_photo ? { uri: auth.data.user_photo } : null,
             containerStyle: styles.avatarContainer
           }}
           {...(auth.data.token && auth.data.user_name
@@ -114,7 +113,7 @@ class Account extends Component {
             />
           </Fragment>
         ) : null}
-      </MainContainer>
+      </WhiteScrollView>
     );
   }
 }

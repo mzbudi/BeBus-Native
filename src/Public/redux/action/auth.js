@@ -13,13 +13,37 @@ const actionLoginRequest = payload => {
   };
 };
 
-const actionPostRegister = payload => {
+const actionRegisterRequest = payload => {
   const body = qs.stringify(payload);
   return {
-    type: 'POST_REGISTER',
+    type: 'REGISTER_REQUEST',
     payload: axios.post(`${API_HOST}/auth/register`, body).then(({ data }) => {
       return data.data;
     })
+  };
+};
+
+const actionGetVerificationCodeRequest = payload => {
+  const body = qs.stringify(payload);
+  return {
+    type: 'GET_VERIFICATION_CODE_REQUEST',
+    payload: axios
+      .post(`${API_HOST}/auth/forgot_password_email`, body)
+      .then(({ data }) => {
+        return data.data;
+      })
+  };
+};
+
+const actionResetPasswordRequest = payload => {
+  const body = qs.stringify(payload);
+  return {
+    type: 'RESET_PASSWORD_REQUEST',
+    payload: axios
+      .post(`${API_HOST}/auth/forgotPassword`, body)
+      .then(({ data }) => {
+        return data.data;
+      })
   };
 };
 
@@ -29,4 +53,10 @@ const actionLogoutRequest = () => {
   };
 };
 
-export { actionLoginRequest, actionPostRegister, actionLogoutRequest };
+export {
+  actionLoginRequest,
+  actionRegisterRequest,
+  actionGetVerificationCodeRequest,
+  actionResetPasswordRequest,
+  actionLogoutRequest
+};

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ScrollView, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import { ListItem, Input } from 'react-native-elements';
 
 import { useForm } from 'react-hook-form';
@@ -9,13 +9,13 @@ import * as yup from 'yup';
 import {
   ListDivider,
   PrimaryButton,
-  color
+  color,
+  WhiteScrollView
 } from '../../Public/components/Layout';
 import { Toast } from '../../Public/components/Toast';
 
 import { networkcheck } from '../../Public/helper/networkcheck';
-
-import { actionPostRegister } from '../../Public/redux/action/auth';
+import { actionRegisterRequest } from '../../Public/redux/action/auth';
 
 const RegisterSchema = yup.object().shape({
   username: yup.string().required(),
@@ -50,7 +50,7 @@ const defaultValues = {
 };
 
 const Register = props => {
-  const { auth, postRegister, navigation } = props;
+  const { auth, registerRequest, navigation } = props;
   const { register, handleSubmit, setValue, errors, getValues } = useForm({
     defaultValues,
     validationSchema: RegisterSchema
@@ -59,6 +59,10 @@ const Register = props => {
   if (auth.data.token) {
     navigation.navigate('Account');
   }
+
+  const handleChange = field => {
+    return text => setValue(field, text, true);
+  };
 
   const onSubmit = async () => {
     const { username, password, name, email, phone } = getValues();
@@ -70,7 +74,8 @@ const Register = props => {
       phone
     };
     try {
-      await postRegister(payload).then(() => {
+      await registerRequest(payload).then(() => {
+        Toast('Registration success.');
         navigation.navigate('Login');
       });
     } catch ({ response }) {
@@ -82,111 +87,113 @@ const Register = props => {
   };
 
   return (
-    <ScrollView style={styles.mainContainer}>
-      <ListDivider />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <Input
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Username"
-            ref={register({ name: 'username' })}
-            errorMessage={errors.username ? errors.username.message : ''}
-            onChangeText={text => setValue('username', text, true)}
-          />
-        }
-      />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <Input
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Password"
-            ref={register({ name: 'password' })}
-            errorMessage={errors.password ? errors.password.message : ''}
-            onChangeText={text => setValue('password', text, true)}
-            secureTextEntry
-          />
-        }
-      />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <Input
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Re-type Password"
-            ref={register({ name: 'retypePassword' })}
-            errorMessage={
-              errors.retypePassword ? errors.retypePassword.message : ''
-            }
-            onChangeText={text => setValue('retypePassword', text, true)}
-            secureTextEntry
-          />
-        }
-      />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <Input
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Email Address"
-            ref={register({ name: 'email' })}
-            errorMessage={errors.email ? errors.email.message : ''}
-            onChangeText={text => setValue('email', text, true)}
-          />
-        }
-      />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <Input
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Name"
-            ref={register({ name: 'name' })}
-            errorMessage={errors.name ? errors.name.message : ''}
-            onChangeText={text => setValue('name', text, true)}
-          />
-        }
-      />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <Input
-            inputContainerStyle={styles.inputContainer}
-            placeholder="Phone (Optional)"
-            ref={register({ name: 'phone' })}
-            errorMessage={errors.phone ? errors.phone.message : ''}
-            onChangeText={text => setValue('phone', text, true)}
-          />
-        }
-      />
-      <ListDivider />
-      <ListDivider />
-      <ListDivider />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <PrimaryButton
-            title="Create Account"
-            onPress={handleSubmit(onSubmit)}
-          />
-        }
-      />
-      <ListDivider />
-      <ListItem
-        containerStyle={styles.listItemContainer}
-        title={
-          <Text>
-            Already have an account?{' '}
-            <Text
-              onPress={() => navigation.navigate('Login')}
-              style={styles.textPrimary}>
-              Login
+    <WhiteScrollView>
+      <View style={styles.mainContainer}>
+        <ListDivider />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <Input
+              inputContainerStyle={styles.inputContainer}
+              placeholder="Username"
+              ref={register({ name: 'username' })}
+              errorMessage={errors.username ? errors.username.message : ''}
+              onChangeText={handleChange('username')}
+            />
+          }
+        />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <Input
+              inputContainerStyle={styles.inputContainer}
+              placeholder="Password"
+              ref={register({ name: 'password' })}
+              errorMessage={errors.password ? errors.password.message : ''}
+              onChangeText={handleChange('password')}
+              secureTextEntry
+            />
+          }
+        />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <Input
+              inputContainerStyle={styles.inputContainer}
+              placeholder="Re-type Password"
+              ref={register({ name: 'retypePassword' })}
+              errorMessage={
+                errors.retypePassword ? errors.retypePassword.message : ''
+              }
+              onChangeText={handleChange('retypePassword')}
+              secureTextEntry
+            />
+          }
+        />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <Input
+              inputContainerStyle={styles.inputContainer}
+              placeholder="Email Address"
+              ref={register({ name: 'email' })}
+              errorMessage={errors.email ? errors.email.message : ''}
+              onChangeText={handleChange('email')}
+            />
+          }
+        />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <Input
+              inputContainerStyle={styles.inputContainer}
+              placeholder="Name"
+              ref={register({ name: 'name' })}
+              errorMessage={errors.name ? errors.name.message : ''}
+              onChangeText={handleChange('name')}
+            />
+          }
+        />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <Input
+              inputContainerStyle={styles.inputContainer}
+              placeholder="Phone (Optional)"
+              ref={register({ name: 'phone' })}
+              errorMessage={errors.phone ? errors.phone.message : ''}
+              onChangeText={handleChange('phone')}
+            />
+          }
+        />
+        <ListDivider />
+        <ListDivider />
+        <ListDivider />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <PrimaryButton
+              title="Create Account"
+              onPress={handleSubmit(onSubmit)}
+            />
+          }
+        />
+        <ListDivider />
+        <ListItem
+          containerStyle={styles.listItemContainer}
+          title={
+            <Text>
+              Already have an account?{' '}
+              <Text
+                onPress={() => navigation.navigate('Login')}
+                style={styles.textPrimary}>
+                Login
+              </Text>
             </Text>
-          </Text>
-        }
-      />
-    </ScrollView>
+          }
+        />
+      </View>
+    </WhiteScrollView>
   );
 };
 
@@ -200,8 +207,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4
   },
   mainContainer: {
-    backgroundColor: '#ffffff',
-    height: '100%',
     paddingHorizontal: 4
   },
   textPrimary: {
@@ -216,7 +221,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  postRegister: payload => dispatch(actionPostRegister(payload))
+  registerRequest: payload => dispatch(actionRegisterRequest(payload))
 });
 
 export default connect(

@@ -21,17 +21,47 @@ const auth = (state = initialState, action) => {
         ...state,
         isLoading: false
       };
-    case 'POST_REGISTER_PENDING':
+    case 'REGISTER_REQUEST_PENDING':
       return {
         ...state,
         isLoading: true
       };
-    case 'POST_REGISTER_FULFILLED':
+    case 'REGISTER_REQUEST_FULFILLED':
       return {
         ...state,
         isLoading: false
       };
-    case 'POST_REGISTER_REJECTED':
+    case 'REGISTER_REQUEST_REJECTED':
+      return {
+        ...state,
+        isLoading: false
+      };
+    case 'CHANGE_PASSWORD_REQUEST_PENDING':
+      return {
+        ...state,
+        isLoading: true
+      };
+    case 'CHANGE_PASSWORD_REQUEST_FULFILLED':
+      return {
+        ...initialState
+      };
+    case 'CHANGE_PASSWORD_REQUEST_REJECTED':
+      return {
+        ...state,
+        isLoading: false
+      };
+    case 'CHANGE_CONTACTINFO_REQUEST_PENDING':
+      return {
+        ...state,
+        isLoading: true
+      };
+    case 'CHANGE_CONTACTINFO_REQUEST_FULFILLED':
+      return {
+        ...state,
+        isLoading: false,
+        data: { ...state.data, ...action.payload }
+      };
+    case 'CHANGE_CONTACTINFO_REQUEST_REJECTED':
       return {
         ...state,
         isLoading: false
