@@ -55,7 +55,8 @@ const ChangePassword = props => {
     };
     try {
       await changePassword({ payload, token, id }).then(() => {
-        navigation.navigate('Account');
+        Toast('Your password has been changed.');
+        navigation.navigate('Auth');
       });
     } catch ({ response }) {
       networkcheck();

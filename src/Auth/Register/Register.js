@@ -15,7 +15,7 @@ import {
 import { Toast } from '../../Public/components/Toast';
 
 import { networkcheck } from '../../Public/helper/networkcheck';
-import { actionPostRegister } from '../../Public/redux/action/auth';
+import { actionRegisterRequest } from '../../Public/redux/action/auth';
 
 const RegisterSchema = yup.object().shape({
   username: yup.string().required(),
@@ -50,7 +50,7 @@ const defaultValues = {
 };
 
 const Register = props => {
-  const { auth, postRegister, navigation } = props;
+  const { auth, registerRequest, navigation } = props;
   const { register, handleSubmit, setValue, errors, getValues } = useForm({
     defaultValues,
     validationSchema: RegisterSchema
@@ -74,7 +74,7 @@ const Register = props => {
       phone
     };
     try {
-      await postRegister(payload).then(() => {
+      await registerRequest(payload).then(() => {
         Toast('Registration success.');
         navigation.navigate('Login');
       });
@@ -221,7 +221,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  postRegister: payload => dispatch(actionPostRegister(payload))
+  registerRequest: payload => dispatch(actionRegisterRequest(payload))
 });
 
 export default connect(

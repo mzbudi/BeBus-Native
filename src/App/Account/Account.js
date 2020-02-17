@@ -20,7 +20,7 @@ class Account extends Component {
         <ListItem
           containerStyle={styles.listItemAvatar}
           leftAvatar={{
-            title: auth.data.user_name[0],
+            ...(auth.data.user_name ? { title: auth.data.user_name[0] } : {}),
             rounded: true,
             size: 50,
             source: auth.data.user_photo ? { uri: auth.data.user_photo } : null,

@@ -7,7 +7,7 @@ const actionChangePassword = ({ token, payload, id }) => {
   body.append('old_password', payload.old_password);
   body.append('new_password', payload.new_password);
   return {
-    type: 'PUT_CHANGE_PASSWORD',
+    type: 'CHANGE_PASSWORD_REQUEST',
     payload: axios.put(`${API_HOST}/user/${id}`, body).then(({ data }) => {
       return data.data;
     })
@@ -23,7 +23,7 @@ const actionChangeContactInfo = ({ token, payload, id }) => {
     body.append('photo', payload.photo);
   }
   return {
-    type: 'PUT_CHANGE_CONTACTINFO',
+    type: 'CHANGE_CONTACTINFO_REQUEST',
     payload: axios.put(`${API_HOST}/user/${id}`, body).then(({ data }) => {
       return data.data;
     })

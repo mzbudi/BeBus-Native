@@ -74,7 +74,7 @@ const Login = props => {
           title={
             <Input
               inputContainerStyle={styles.inputContainer}
-              placeholder="Username"
+              placeholder="Username / Email"
               ref={register({ name: 'username' })}
               errorMessage={errors.username ? errors.username.message : ''}
               onChangeText={handleChange('username')}
