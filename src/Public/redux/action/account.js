@@ -14,4 +14,20 @@ const actionChangePassword = ({ token, payload, id }) => {
   };
 };
 
-export { actionChangePassword };
+const actionChangeContactInfo = ({ token, payload, id }) => {
+  const body = new FormData();
+  body.append('name', payload.name);
+  body.append('email', payload.email);
+  body.append('phone', payload.phone);
+  if (payload.photo && payload.photo !== '') {
+    body.append('photo', payload.photo);
+  }
+  return {
+    type: 'PUT_CHANGE_CONTACTINFO',
+    payload: axios.put(`${API_HOST}/user/${id}`, body).then(({ data }) => {
+      return data.data;
+    })
+  };
+};
+
+export { actionChangePassword, actionChangeContactInfo };

@@ -75,6 +75,7 @@ const Register = props => {
     };
     try {
       await postRegister(payload).then(() => {
+        Toast('Registration success.');
         navigation.navigate('Login');
       });
     } catch ({ response }) {

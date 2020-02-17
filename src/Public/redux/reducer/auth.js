@@ -36,6 +36,36 @@ const auth = (state = initialState, action) => {
         ...state,
         isLoading: false
       };
+    case 'PUT_CHANGE_PASSWORD_PENDING':
+      return {
+        ...state,
+        isLoading: true
+      };
+    case 'PUT_CHANGE_PASSWORD_FULFILLED':
+      return {
+        ...initialState
+      };
+    case 'PUT_CHANGE_PASSWORD_REJECTED':
+      return {
+        ...state,
+        isLoading: false
+      };
+    case 'PUT_CHANGE_CONTACTINFO_PENDING':
+      return {
+        ...state,
+        isLoading: true
+      };
+    case 'PUT_CHANGE_CONTACTINFO_FULFILLED':
+      return {
+        ...state,
+        isLoading: false,
+        data: { ...state.data, ...action.payload }
+      };
+    case 'PUT_CHANGE_CONTACTINFO_REJECTED':
+      return {
+        ...state,
+        isLoading: false
+      };
     case 'LOGOUT_REQUEST':
       return {
         ...initialState

@@ -20,11 +20,10 @@ class Account extends Component {
         <ListItem
           containerStyle={styles.listItemAvatar}
           leftAvatar={{
+            title: auth.data.user_name[0],
             rounded: true,
             size: 50,
-            source: auth.data.user_photo
-              ? { uri: auth.data.user_photo }
-              : require('../../../assets/images/avatar-placeholder.jpg'),
+            source: auth.data.user_photo ? { uri: auth.data.user_photo } : null,
             containerStyle: styles.avatarContainer
           }}
           {...(auth.data.token && auth.data.user_name
