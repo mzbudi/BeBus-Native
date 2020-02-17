@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
+// import { useState } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ListItem, Input } from 'react-native-elements';
 
 import { useForm } from 'react-hook-form';
@@ -40,13 +41,17 @@ const ForgotPasswordSchema = yup.object().shape({
 });
 
 const defaultValues = {
-  oldPassword: '',
   newPassword: '',
   retypeNewPassword: ''
 };
 
 const ForgotPassword = props => {
-  const { getVerificationCodeRequest } = props;
+  const {
+    getVerificationCodeRequest,
+    resetPasswordRequest,
+    navigation
+  } = props;
+  // const [timer, setTimer] = useState(0);
   const { register, handleSubmit, setValue, errors, getValues } = useForm({
     defaultValues,
     validationSchema: ForgotPasswordSchema
@@ -62,10 +67,32 @@ const ForgotPassword = props => {
       email
     };
     try {
-      await getVerificationCodeRequest(payload).then(res => {
-        console.log(res);
+      await getVerificationCodeRequest(payload).then(({ value }) => {
+        if (value && value.message) {
+          Toast(value.message);
+        }
       });
     } catch ({ response }) {
+      if (response && response.data.error) {
+        Toast(response.data.error);
+      }
+    }
+  };
+
+  const onSubmit = async () => {
+    const { newPassword, retypeNewPassword, verificationCode } = getValues();
+    const payload = {
+      password: newPassword,
+      rePassword: retypeNewPassword,
+      resetKey: verificationCode
+    };
+    try {
+      await resetPasswordRequest(payload).then(() => {
+        Toast('Your password has been changed.');
+        navigation.navigate('AuthLogin');
+      });
+    } catch ({ response }) {
+      networkcheck();
       if (response && response.data.error) {
         Toast(response.data.error);
       }
@@ -101,6 +128,42 @@ const ForgotPassword = props => {
           <PrimaryButton title="Get Code" onPress={() => handleGetCode()} />
         }
       />
+      <ListItem
+        containerStyle={styles.listItemContainer}
+        title={
+          <Input
+            inputContainerStyle={styles.inputContainer}
+            placeholder="New Password"
+            ref={register({ name: 'newPassword' })}
+            errorMessage={errors.newPassword ? errors.newPassword.message : ''}
+            onChangeText={handleChange('newPassword')}
+            secureTextEntry
+          />
+        }
+      />
+      <ListItem
+        containerStyle={styles.listItemContainer}
+        title={
+          <Input
+            inputContainerStyle={styles.inputContainer}
+            placeholder="Re-type new Password"
+            ref={register({ name: 'retypeNewPassword' })}
+            errorMessage={
+              errors.retypeNewPassword ? errors.retypeNewPassword.message : ''
+            }
+            onChangeText={handleChange('retypeNewPassword')}
+            secureTextEntry
+          />
+        }
+      />
+      <ListDivider />
+      <ListDivider />
+      <ListItem
+        containerStyle={styles.listItemContainer}
+        title={
+          <PrimaryButton title="Submit" onPress={handleSubmit(onSubmit)} />
+        }
+      />
     </WhiteScrollView>
   );
 };
@@ -125,7 +188,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   getVerificationCodeRequest: payload =>
-    dispatch(actionGetVerificationCodeRequest(payload))
+    dispatch(actionGetVerificationCodeRequest(payload)),
+  resetPasswordRequest: payload => dispatch(actionResetPasswordRequest(payload))
 });
 
 export default connect(
