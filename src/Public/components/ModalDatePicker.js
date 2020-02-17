@@ -3,6 +3,8 @@ import Modal, { ModalTitle, ModalContent } from 'react-native-modals';
 import CalendarPicker from 'react-native-calendar-picker';
 import { Text, View, TouchableOpacity } from 'react-native';
 import moment from 'moment';
+import { addDate } from '../../Public/redux/action/schedule';
+import { connect } from 'react-redux';
 
 class ModalDatePicker extends React.Component {
   constructor(props) {
@@ -25,6 +27,8 @@ class ModalDatePicker extends React.Component {
 
   choosenDate = () => {
     const { dateChoosen } = this.state;
+    const { addDateData } = this.props;
+    addDateData(moment(dateChoosen).format('MMM Do YYYY'));
     if (this.props.chooseDate) {
       this.props.chooseDate(dateChoosen);
     }
@@ -57,4 +61,17 @@ class ModalDatePicker extends React.Component {
   }
 }
 
-export default ModalDatePicker;
+const mapStateToProps = state => {
+  return {
+    schedule: state.schedule
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  addDateData: payload => dispatch(addDate(payload))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ModalDatePicker);

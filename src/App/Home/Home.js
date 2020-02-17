@@ -10,6 +10,11 @@ import styled from 'styled-components';
 import { ListItem, Icon, Text } from 'react-native-elements';
 import ModalDatePicker from '../../Public/components/ModalDatePicker';
 import moment from 'moment';
+import {
+  incrementData,
+  decrementData,
+  findBusTicket
+} from '../../Public/redux/action/schedule';
 
 import SplashScreen from 'react-native-splash-screen';
 
@@ -60,8 +65,8 @@ class Home extends Component {
     });
   };
 
-  handleCity = () => {
-    this.props.navigation.navigate('SearchStation');
+  handleCity = textParams => {
+    this.props.navigation.navigate('SearchStation', { textParams });
   };
 
   chooseDate = chooseDate => {
@@ -77,13 +82,25 @@ class Home extends Component {
     });
   };
 
+  handleQty = qtyparams => {
+    const { handleIncrement, handleDecrement } = this.props;
+    if (qtyparams === 'inc') {
+      handleIncrement();
+    } else {
+      handleDecrement();
+    }
+  };
+
   handleFindBus = () => {
-    this.props.navigation.navigate('Schedule');
+    // this.props.navigation.navigate('Schedule');
+    const { handleFindBusTicket } = this.props;
+    handleFindBusTicket();
   };
 
   render() {
     const { calendarVisible, date } = this.state;
     const dateConverted = date ? moment(date).format('MMM Do YYYY') : '';
+    const { schedule } = this.props;
     return (
       <Fragment>
         <MainContainer>
@@ -105,10 +122,14 @@ class Home extends Component {
                 <View>
                   <ListItem
                     onPress={() => {
-                      this.handleCity();
+                      this.handleCity('Departure');
                     }}
                     title="Leaving from"
-                    subtitle="Departure City"
+                    subtitle={
+                      schedule.departureData
+                        ? schedule.departureData.station_name
+                        : 'Departure City'
+                    }
                     containerStyle={styles.listItemContainer}
                     bottomDivider
                     chevron={{ color: color.Primary, size: 40 }}
@@ -117,10 +138,14 @@ class Home extends Component {
                 <View>
                   <ListItem
                     onPress={() => {
-                      this.handleCity();
+                      this.handleCity('Arrival');
                     }}
                     title="Going to"
-                    subtitle="Arrival City"
+                    subtitle={
+                      schedule.arrivalData
+                        ? schedule.arrivalData.station_name
+                        : 'Arrival City'
+                    }
                     containerStyle={styles.listItemContainer}
                     bottomDivider
                     chevron={{ color: color.Primary, size: 40 }}
@@ -176,23 +201,27 @@ class Home extends Component {
                   }
                   rightSubtitle={
                     <FlexRow>
-                      <Icon
-                        name="minus"
-                        size={10}
-                        type="font-awesome"
-                        color={color.Primary}
-                        containerStyle={styles.iconContainer}
-                        reverse
-                      />
-                      <Text style={styles.text}>1</Text>
-                      <Icon
-                        name="plus"
-                        size={10}
-                        type="font-awesome"
-                        color={color.Primary}
-                        containerStyle={styles.iconContainer}
-                        reverse
-                      />
+                      <TouchableOpacity onPress={() => this.handleQty('dec')}>
+                        <Icon
+                          name="minus"
+                          size={10}
+                          type="font-awesome"
+                          color={color.Primary}
+                          containerStyle={styles.iconContainer}
+                          reverse
+                        />
+                      </TouchableOpacity>
+                      <Text style={styles.text}>{schedule.qty}</Text>
+                      <TouchableOpacity onPress={() => this.handleQty('inc')}>
+                        <Icon
+                          name="plus"
+                          size={10}
+                          type="font-awesome"
+                          color={color.Primary}
+                          containerStyle={styles.iconContainer}
+                          reverse
+                        />
+                      </TouchableOpacity>
                     </FlexRow>
                   }
                   containerStyle={styles.listItemContainer}
@@ -241,10 +270,16 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    schedule: state.schedule
+  };
 };
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  handleIncrement: () => dispatch(incrementData()),
+  handleDecrement: () => dispatch(decrementData()),
+  handleFindBusTicket: () => dispatch(findBusTicket())
+});
 
 export default connect(
   mapStateToProps,
