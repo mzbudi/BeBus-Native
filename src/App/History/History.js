@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { FlatList } from 'react-native';
+import { FlatList, Text } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements';
+import { actionBookingGet } from '../../Public/redux/action/booking';
 
 const DATA = new Array(10).fill({
   id: '1',
@@ -15,35 +16,50 @@ class History extends Component {
   tripDetail = () => {
     this.navigation.navigate('TripDetail');
   };
+
+  componentDidMount() {
+    const { getDataBooking, auth } = this.props
+    if (auth.data.user_id !== undefined || auth.data.user_id) {
+      const payload = {
+        params: {
+          user_id: auth.data.user_id
+        }
+      }
+      getDataBooking(payload)
+    }
+
+  }
   render() {
-    const { navigation } = this.props;
+    const { navigation, booking } = this.props;
     return (
       <Fragment>
-        {/* <Image source={require('../../../assets/images/bus1.jpg')} /> */}
-        <FlatList
-          style={styles.paddingFlatList}
-          data={DATA}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => (
-            <ListItem
-              bottomDivider
-              chevron={{
-                color: color.Secondary,
-                size: 40,
-                padding: 0,
-                marginVertical: -12
-              }}
-              leftIcon={
-                <Icon name="import-export" type="material" color="green" />
-              }
-              title={`Booking ID : ${item.title}`}
-              subtitle={`Destination : ${item.title2}`}
-              onPress={() => {
-                navigation.navigate('TripDetail');
-              }}
-            />
-          )}
-        />
+        {booking.dataBooking.length === 0 ? <Text></Text> : (
+          <FlatList
+            style={styles.paddingFlatList}
+            data={booking.dataBooking}
+            keyExtractor={item => item.booking_id}
+            renderItem={({ item }) => (
+              <ListItem
+                bottomDivider
+                chevron={{
+                  color: color.Secondary,
+                  size: 40,
+                  padding: 0,
+                  marginVertical: -12
+                }}
+                leftIcon={
+                  <Icon name="import-export" type="material" color="green" />
+                }
+                title={`Booking Number : ${item.booking_number}`}
+                subtitle={`Price : ${item.schedule_price}`}
+                onPress={() => {
+                  navigation.navigate('TripDetail', { item });
+                }}
+              />
+            )}
+          />
+        )}
+
       </Fragment>
     );
   }
@@ -75,10 +91,15 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    auth: state.auth,
+    booking: state.booking
+  };
 };
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  getDataBooking: payload => (dispatch(actionBookingGet(payload)))
+});
 
 export default connect(
   mapStateToProps,
