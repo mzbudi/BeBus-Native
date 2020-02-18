@@ -37,14 +37,19 @@ const decrementData = () => {
 };
 
 const findBusTicket = payload => {
-  console.log(payload);
   const config = {
     // headers: payload.headers,
     params: {
-      date: payload.date,
-      departureCity: payload.departureCity,
-      arrivalCity: payload.arrivalCity,
-      minAvailableSeats: payload.minAvailableSeats
+      date: payload.date || '',
+      departureCity: payload.departureCity || '',
+      arrivalCity: payload.arrivalCity || '',
+      minAvailableSeats: payload.minAvailableSeats || '',
+      minDepartureTime: payload.minDepartureTime || '',
+      maxDepartureTime: payload.maxDepartureTime || '',
+      minArrivalTime: payload.minArrivalTime || '',
+      maxArrivalTime: payload.maxArrivalTime || '',
+      minPrice: payload.minPrice || '',
+      maxPrice: payload.maxPrice || '',
     }
   };
   return {

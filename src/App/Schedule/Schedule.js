@@ -4,6 +4,7 @@ import { View, TouchableOpacity, FlatList } from 'react-native';
 import { Icon, ListItem } from 'react-native-elements';
 import ModalFilterBus from '../../Public/components/ModalFilterBus';
 import ListBus from '../../Public/components/ListBus';
+import { findBusTicket } from '../../Public/redux/action/schedule';
 
 import { color } from '../../Public/components/Layout';
 
@@ -33,6 +34,47 @@ class Schedule extends Component {
   state = {
     visibleFilter: false
   };
+
+  handleDepartureTimeZone1 = () => {
+    const { schedule, handleFindBusTicket } = this.props
+    const body = {
+      date: schedule.date || '',
+      departureCity: schedule.departureCity || '',
+      arrivalCity: schedule.arrivalCity || '',
+      minAvailableSeats: schedule.minAvailableSeats || '',
+      minDepartureTime: '06:00',
+      maxDepartureTime: '12:00',
+      minArrivalTime: schedule.minArrivalTime || '',
+      maxArrivalTime: schedule.maxArrivalTime || '',
+      minPrice: schedule.minPrice || '',
+      maxPrice: schedule.maxPrice || '',
+    }
+    handleFindBusTicket(body),
+      this.setState({
+        visibleFilter: false
+      });
+  }
+
+  handleDepartureTimeZone2 = () => {
+    const { schedule, handleFindBusTicket } = this.props
+    const body = {
+      date: schedule.date || '',
+      departureCity: schedule.departureCity || '',
+      arrivalCity: schedule.arrivalCity || '',
+      minAvailableSeats: schedule.minAvailableSeats || '',
+      minDepartureTime: '12:01',
+      maxDepartureTime: '19:00',
+      minArrivalTime: schedule.minArrivalTime || '',
+      maxArrivalTime: schedule.maxArrivalTime || '',
+      minPrice: schedule.minPrice || '',
+      maxPrice: schedule.maxPrice || '',
+    }
+    handleFindBusTicket(body),
+      this.setState({
+        visibleFilter: false
+      });
+    console.log(body)
+  }
 
   handleFilterBus = () => {
     this.setState({
@@ -83,6 +125,8 @@ class Schedule extends Component {
         <ModalFilterBus
           visibleFilter={visibleFilter}
           functionVisible={this.handleCloseModal.bind(this)}
+          timeZone1={this.handleDepartureTimeZone1.bind(this)}
+          timeZone2={this.handleDepartureTimeZone2.bind(this)}
         />
       </Fragment>
     );
@@ -111,7 +155,9 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  handleFindBusTicket: payload => dispatch(findBusTicket(payload))
+});
 
 export default connect(
   mapStateToProps,

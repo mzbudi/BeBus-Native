@@ -52,6 +52,8 @@ class SearchStation extends Component {
       }
     );
   };
+
+
   render() {
     const { station } = this.props;
     const { search } = this.state;
@@ -86,8 +88,8 @@ class SearchStation extends Component {
               )}
             />
           ) : (
-            ''
-          )}
+              ''
+            )}
         </MainContainer>
       </Fragment>
     );

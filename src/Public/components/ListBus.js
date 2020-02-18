@@ -15,7 +15,7 @@ class ListBus extends Component {
           )}
         </Text>
         <Text style={styles.fontBold}>
-          Arival : {moment(scheduleData.schedule_arrival_time).format('LLL')}
+          Arival : {moment(scheduleData.schedule_arrival_time).format('MM-DD-YYYY h:mm:ss a')}
         </Text>
         <Text style={styles.fontBold}>
           Capacity : {scheduleData.bus_capacity}

@@ -18,6 +18,19 @@ class ModalFilterBus extends Component {
       this.props.functionVisible();
     }
   }
+
+  handleTimeZone1() {
+    if (this.props.timeZone1) {
+      this.props.timeZone1();
+    }
+  }
+
+  handleTimeZone2() {
+    if (this.props.timeZone2) {
+      this.props.timeZone2();
+    }
+  }
+
   onDateChange = (date, type) => {
     this.setState({
       dateChoosen: date
@@ -70,6 +83,7 @@ class ModalFilterBus extends Component {
             subtitleStyle={styles.textBold}
           />
           <ListItem
+            onPress={() => { this.handleTimeZone1() }}
             bottomDivider
             chevron={{
               color: 'green',
@@ -84,6 +98,7 @@ class ModalFilterBus extends Component {
             subtitleStyle={styles.textBold}
           />
           <ListItem
+            onPress={() => { this.handleTimeZone2() }}
             bottomDivider
             chevron={{
               color: 'green',

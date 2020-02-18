@@ -4,7 +4,7 @@ const initialState = {
   dateSearch: [],
   qty: 1,
   dataFind: {},
-  searchResult: []
+  searchResult: [],
 };
 
 const schedule = (state = initialState, action) => {
@@ -45,6 +45,22 @@ const schedule = (state = initialState, action) => {
         isLoading: false
       };
     case 'FIND_BUS_FULFILLED':
+      return {
+        ...state,
+        isLoading: false,
+        searchResult: action.payload
+      };
+    case 'MINMAX_DEPART_PENDING':
+      return {
+        ...state,
+        isLoading: false
+      };
+    case 'MINMAX_DEPART_REJECTED':
+      return {
+        ...state,
+        isLoading: false
+      };
+    case 'MINMAX_DEPART_FULFILLED':
       return {
         ...state,
         isLoading: false,
