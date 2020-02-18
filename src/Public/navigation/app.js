@@ -52,7 +52,7 @@ const HomeScreen = createStackNavigator(
     },
     ScheduleDetail: {
       screen: ScheduleDetail,
-      ...navigationOptions('ScheduleDetail')
+      ...navigationOptions('Schedule Detail')
     }
   },
   {

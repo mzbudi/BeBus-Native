@@ -5,6 +5,7 @@ const initialState = {
   qty: 1,
   dataFind: {},
   searchResult: [],
+  busDetail: {}
 };
 
 const schedule = (state = initialState, action) => {
@@ -65,6 +66,19 @@ const schedule = (state = initialState, action) => {
         ...state,
         isLoading: false,
         searchResult: action.payload
+      };
+    case 'GET_BUS_DETAIL_PENDING':
+      return {
+        ...state
+      };
+    case 'GET_BUS_DETAIL_REJECTED':
+      return {
+        ...state
+      };
+    case 'GET_BUS_DETAIL_FULFILLED':
+      return {
+        ...state,
+        busDetail: action.payload
       };
     default:
       return state;

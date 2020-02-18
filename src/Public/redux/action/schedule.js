@@ -49,7 +49,7 @@ const findBusTicket = payload => {
       minArrivalTime: payload.minArrivalTime || '',
       maxArrivalTime: payload.maxArrivalTime || '',
       minPrice: payload.minPrice || '',
-      maxPrice: payload.maxPrice || '',
+      maxPrice: payload.maxPrice || ''
     }
   };
   return {
@@ -60,11 +60,30 @@ const findBusTicket = payload => {
   };
 };
 
+const getBusDetail = payload => {
+  console.log(payload.id);
+  const config = {
+    //headers: payload.headers,
+  };
+  return {
+    type: 'GET_BUS_DETAIL',
+    payload: axios
+      .get(`${API_HOST}/schedule/${payload.id}`)
+      .then(({ data }) => {
+        return data.data;
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  };
+};
+
 export {
   addDeparture,
   addArrival,
   addDate,
   incrementData,
   decrementData,
-  findBusTicket
+  findBusTicket,
+  getBusDetail
 };
