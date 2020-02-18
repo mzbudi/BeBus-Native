@@ -4,7 +4,10 @@ import { View, TouchableOpacity, FlatList } from 'react-native';
 import { Icon, ListItem } from 'react-native-elements';
 import ModalFilterBus from '../../Public/components/ModalFilterBus';
 import ListBus from '../../Public/components/ListBus';
-import { findBusTicket } from '../../Public/redux/action/schedule';
+import {
+  findBusTicket,
+  getBusDetail
+} from '../../Public/redux/action/schedule';
 
 import { color } from '../../Public/components/Layout';
 
@@ -97,7 +100,7 @@ class Schedule extends Component {
   }
 
   handleDepartureTimeZone1 = () => {
-    const { schedule, handleFindBusTicket } = this.props
+    const { schedule, handleFindBusTicket } = this.props;
     const body = {
       date: schedule.date || '',
       departureCity: schedule.departureCity || '',
@@ -108,13 +111,13 @@ class Schedule extends Component {
       minArrivalTime: schedule.minArrivalTime || '',
       maxArrivalTime: schedule.maxArrivalTime || '',
       minPrice: schedule.minPrice || '',
-      maxPrice: schedule.maxPrice || '',
-    }
+      maxPrice: schedule.maxPrice || ''
+    };
     handleFindBusTicket(body),
       this.setState({
         visibleFilter: false
       });
-  }
+  };
 
   handleDepartureTimeZone1 = () => {
     const { schedule, handleFindBusTicket } = this.props
@@ -137,7 +140,7 @@ class Schedule extends Component {
   }
 
   handleDepartureTimeZone2 = () => {
-    const { schedule, handleFindBusTicket } = this.props
+    const { schedule, handleFindBusTicket } = this.props;
     const body = {
       date: schedule.date || '',
       departureCity: schedule.departureCity || '',
@@ -148,13 +151,13 @@ class Schedule extends Component {
       minArrivalTime: schedule.minArrivalTime || '',
       maxArrivalTime: schedule.maxArrivalTime || '',
       minPrice: schedule.minPrice || '',
-      maxPrice: schedule.maxPrice || '',
-    }
+      maxPrice: schedule.maxPrice || ''
+    };
     handleFindBusTicket(body),
       this.setState({
         visibleFilter: false
       });
-  }
+  };
 
   handleFilterBus = () => {
     this.setState({
@@ -166,6 +169,10 @@ class Schedule extends Component {
     this.setState({
       visibleFilter: false
     });
+  };
+
+  handleGetBusDetail = id => {
+    this.props.handleGetBusDetail({ id: id });
   };
 
   componentDidMount() {
@@ -186,6 +193,7 @@ class Schedule extends Component {
           renderItem={({ item }) => (
             <ListItem
               onPress={() => {
+                this.handleGetBusDetail(item.schedule_id);
                 this.props.navigation.navigate('ScheduleDetail');
               }}
               bottomDivider
@@ -239,7 +247,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  handleFindBusTicket: payload => dispatch(findBusTicket(payload))
+  handleFindBusTicket: payload => dispatch(findBusTicket(payload)),
+  handleGetBusDetail: payload => dispatch(getBusDetail(payload))
 });
 
 export default connect(
