@@ -1,14 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, FlatList, Text } from 'react-native';
+import { View, TouchableOpacity, FlatList } from 'react-native';
 import { Icon, ListItem } from 'react-native-elements';
 import ModalFilterBus from '../../Public/components/ModalFilterBus';
-
-const DATA = new Array(10).fill({
-  id: '1',
-  title: '12121',
-  title2: 'Bogor, Branang-Siang'
-});
+import ListBus from '../../Public/components/ListBus';
 
 import { color } from '../../Public/components/Layout';
 
@@ -59,12 +54,13 @@ class Schedule extends Component {
 
   render() {
     const { visibleFilter } = this.state;
+    const { schedule } = this.props;
     return (
       <Fragment>
         <FlatList
           style={styles.paddingFlatList}
-          data={DATA}
-          keyExtractor={item => item.id}
+          data={schedule.searchResult}
+          keyExtractor={item => item.schedule_id}
           renderItem={({ item }) => (
             <ListItem
               onPress={() => {
@@ -80,14 +76,7 @@ class Schedule extends Component {
               leftIcon={
                 <Icon name="import-export" type="material" color="green" />
               }
-              title={
-                <Fragment>
-                  <Text>Bus Name :</Text>
-                  <Text>Departure : </Text>
-                  <Text>Arival : </Text>
-                  <Text style={styles.fontBold}>Price : </Text>
-                </Fragment>
-              }
+              title={<ListBus scheduleData={item} />}
             />
           )}
         />
@@ -117,7 +106,9 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    schedule: state.schedule
+  };
 };
 
 const mapDispatchToProps = dispatch => ({});

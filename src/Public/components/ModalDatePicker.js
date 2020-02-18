@@ -6,7 +6,7 @@ import moment from 'moment';
 import { addDate } from '../../Public/redux/action/schedule';
 import { connect } from 'react-redux';
 
-class ModalDatePicker extends React.Component {
+class ModalDatePicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +28,8 @@ class ModalDatePicker extends React.Component {
   choosenDate = () => {
     const { dateChoosen } = this.state;
     const { addDateData } = this.props;
-    addDateData(moment(dateChoosen).format('MMM Do YYYY'));
+    // const dateFormat = moment(dateChoosen).format('MMM Do YYYY');
+    addDateData(moment(dateChoosen).format('YYYY-MM-DD'));
     if (this.props.chooseDate) {
       this.props.chooseDate(dateChoosen);
     }

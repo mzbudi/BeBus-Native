@@ -3,7 +3,8 @@ const initialState = {
   arrivalData: [],
   dateSearch: [],
   qty: 1,
-  dataFind: []
+  dataFind: {},
+  searchResult: []
 };
 
 const schedule = (state = initialState, action) => {
@@ -28,11 +29,15 @@ const schedule = (state = initialState, action) => {
         ...state,
         qty: state.qty - 1
       };
-    case 'FIND_BUS':
+    case 'ADD_DATE':
       return {
         ...state,
-        isLoading: false,
-        dataFind: { ...state }
+        dateSearch: action.payload
+      };
+    case 'FIND_BUS_PENDING':
+      return {
+        ...state,
+        isLoading: false
       };
     case 'FIND_BUS_REJECTED':
       return {
@@ -41,8 +46,9 @@ const schedule = (state = initialState, action) => {
       };
     case 'FIND_BUS_FULFILLED':
       return {
+        ...state,
         isLoading: false,
-        data: action.payload
+        searchResult: action.payload
       };
     default:
       return state;

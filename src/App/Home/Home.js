@@ -93,8 +93,16 @@ class Home extends Component {
 
   handleFindBus = () => {
     // this.props.navigation.navigate('Schedule');
-    const { handleFindBusTicket } = this.props;
-    handleFindBusTicket();
+    const { handleFindBusTicket, navigation } = this.props;
+    const { schedule } = this.props;
+    const body = {
+      date: schedule.dateSearch || '',
+      departureCity: schedule.departureData.station_city_id || '',
+      arrivalCity: schedule.arrivalData.station_city_id || '',
+      minAvailableSeats: schedule.qty
+    };
+    handleFindBusTicket(body);
+    navigation.navigate('Schedule');
   };
 
   render() {
@@ -278,7 +286,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   handleIncrement: () => dispatch(incrementData()),
   handleDecrement: () => dispatch(decrementData()),
-  handleFindBusTicket: () => dispatch(findBusTicket())
+  handleFindBusTicket: payload => dispatch(findBusTicket(payload))
 });
 
 export default connect(

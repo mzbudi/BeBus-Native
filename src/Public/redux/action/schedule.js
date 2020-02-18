@@ -1,5 +1,7 @@
-// import axios from 'axios';
-// import qs from 'qs';
+import axios from 'axios';
+import qs from 'qs';
+
+import { API_HOST } from 'react-native-dotenv';
 
 const addDeparture = payload => {
   return {
@@ -35,9 +37,21 @@ const decrementData = () => {
 };
 
 const findBusTicket = payload => {
+  console.log(payload);
+  const config = {
+    // headers: payload.headers,
+    params: {
+      date: payload.date,
+      departureCity: payload.departureCity,
+      arrivalCity: payload.arrivalCity,
+      minAvailableSeats: payload.minAvailableSeats
+    }
+  };
   return {
     type: 'FIND_BUS',
-    payload: payload
+    payload: axios.get(`${API_HOST}/schedule/`, config).then(({ data }) => {
+      return data.data;
+    })
   };
 };
 
