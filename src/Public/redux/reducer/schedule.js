@@ -25,10 +25,16 @@ const schedule = (state = initialState, action) => {
         qty: state.qty + 1
       };
     case 'DECREMENT_DATA':
-      return {
-        ...state,
-        qty: state.qty - 1
-      };
+      if (state.qty === 1) {
+        return {
+          ...state
+        }
+      } else {
+        return {
+          ...state,
+          qty: state.qty - 1
+        };
+      }
     case 'ADD_DATE':
       return {
         ...state,

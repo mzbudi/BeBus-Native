@@ -31,6 +31,24 @@ class ModalFilterBus extends Component {
     }
   }
 
+  showAll() {
+    if (this.props.showAll) {
+      this.props.showAll();
+    }
+  }
+
+  under300K() {
+    if (this.props.under300K) {
+      this.props.under300K();
+    }
+  }
+
+  over300K() {
+    if (this.props.over300K) {
+      this.props.over300K();
+    }
+  }
+
   onDateChange = (date, type) => {
     this.setState({
       dateChoosen: date
@@ -55,6 +73,7 @@ class ModalFilterBus extends Component {
         modalTitle={<ModalTitle title="Filter Bus By..." />}>
         <ModalContent>
           <ListItem
+            onPress={() => { this.showAll() }}
             bottomDivider
             chevron={{
               color: 'green',
@@ -65,10 +84,11 @@ class ModalFilterBus extends Component {
             leftIcon={
               <Icon name="import-export" type="material" color="green" />
             }
-            title="Lowest Price"
-            subtitleStyle={styles.textBold}
+            title="Show All Bus"
+            titleStyle={styles.textBold}
           />
           <ListItem
+            onPress={() => { this.under300K() }}
             bottomDivider
             chevron={{
               color: 'green',
@@ -79,8 +99,23 @@ class ModalFilterBus extends Component {
             leftIcon={
               <Icon name="import-export" type="material" color="green" />
             }
-            title="Highest Price"
-            subtitleStyle={styles.textBold}
+            title="Under 300K !"
+            titleStyle={styles.textBold}
+          />
+          <ListItem
+            onPress={() => { this.over300K() }}
+            bottomDivider
+            chevron={{
+              color: 'green',
+              size: 40,
+              padding: 0,
+              marginVertical: -12
+            }}
+            leftIcon={
+              <Icon name="import-export" type="material" color="green" />
+            }
+            title="Over 300K !"
+            titleStyle={styles.textBold}
           />
           <ListItem
             onPress={() => { this.handleTimeZone1() }}
@@ -94,8 +129,8 @@ class ModalFilterBus extends Component {
             leftIcon={
               <Icon name="import-export" type="material" color="green" />
             }
-            subtitle="Departure Time 08.00 AM - 12.00 PM"
-            subtitleStyle={styles.textBold}
+            title="Departure Time 08.00 AM - 12.00 PM"
+            titleStyle={styles.textBold}
           />
           <ListItem
             onPress={() => { this.handleTimeZone2() }}
@@ -109,8 +144,8 @@ class ModalFilterBus extends Component {
             leftIcon={
               <Icon name="import-export" type="material" color="green" />
             }
-            subtitle="Departure Time 12.00 PM - 19.00 PM"
-            subtitleStyle={styles.textBold}
+            title="Departure Time 12.00 PM - 19.00 PM"
+            titleStyle={styles.textBold}
           />
         </ModalContent>
       </Modal>

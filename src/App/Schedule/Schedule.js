@@ -35,6 +35,67 @@ class Schedule extends Component {
     visibleFilter: false
   };
 
+  handleShowAllBus = () => {
+    const { schedule, handleFindBusTicket } = this.props
+    const body = {
+      date: schedule.date || '',
+      departureCity: schedule.departureCity || '',
+      arrivalCity: schedule.arrivalCity || '',
+      minAvailableSeats: schedule.minAvailableSeats || '',
+      minDepartureTime: '',
+      maxDepartureTime: '',
+      minArrivalTime: '',
+      maxArrivalTime: '',
+      minPrice: '',
+      maxPrice: '',
+    }
+    console.log(body)
+    handleFindBusTicket(body),
+      this.setState({
+        visibleFilter: false
+      });
+  }
+
+  handleUnder300K = () => {
+    const { schedule, handleFindBusTicket } = this.props
+    const body = {
+      date: schedule.date || '',
+      departureCity: schedule.departureCity || '',
+      arrivalCity: schedule.arrivalCity || '',
+      minAvailableSeats: schedule.minAvailableSeats || '',
+      minDepartureTime: '',
+      maxDepartureTime: '',
+      minArrivalTime: schedule.minArrivalTime || '',
+      maxArrivalTime: schedule.maxArrivalTime || '',
+      minPrice: '',
+      maxPrice: '300000',
+    }
+    handleFindBusTicket(body),
+      this.setState({
+        visibleFilter: false
+      });
+  }
+
+  handleOver300K = () => {
+    const { schedule, handleFindBusTicket } = this.props
+    const body = {
+      date: schedule.date || '',
+      departureCity: schedule.departureCity || '',
+      arrivalCity: schedule.arrivalCity || '',
+      minAvailableSeats: schedule.minAvailableSeats || '',
+      minDepartureTime: '',
+      maxDepartureTime: '',
+      minArrivalTime: schedule.minArrivalTime || '',
+      maxArrivalTime: schedule.maxArrivalTime || '',
+      minPrice: '300000',
+      maxPrice: '',
+    }
+    handleFindBusTicket(body),
+      this.setState({
+        visibleFilter: false
+      });
+  }
+
   handleDepartureTimeZone1 = () => {
     const { schedule, handleFindBusTicket } = this.props
     const body = {
@@ -55,15 +116,15 @@ class Schedule extends Component {
       });
   }
 
-  handleDepartureTimeZone2 = () => {
+  handleDepartureTimeZone1 = () => {
     const { schedule, handleFindBusTicket } = this.props
     const body = {
       date: schedule.date || '',
       departureCity: schedule.departureCity || '',
       arrivalCity: schedule.arrivalCity || '',
       minAvailableSeats: schedule.minAvailableSeats || '',
-      minDepartureTime: '12:01',
-      maxDepartureTime: '19:00',
+      minDepartureTime: '00:00',
+      maxDepartureTime: '12:00',
       minArrivalTime: schedule.minArrivalTime || '',
       maxArrivalTime: schedule.maxArrivalTime || '',
       minPrice: schedule.minPrice || '',
@@ -73,7 +134,26 @@ class Schedule extends Component {
       this.setState({
         visibleFilter: false
       });
-    console.log(body)
+  }
+
+  handleDepartureTimeZone2 = () => {
+    const { schedule, handleFindBusTicket } = this.props
+    const body = {
+      date: schedule.date || '',
+      departureCity: schedule.departureCity || '',
+      arrivalCity: schedule.arrivalCity || '',
+      minAvailableSeats: schedule.minAvailableSeats || '',
+      minDepartureTime: '12:01',
+      maxDepartureTime: '21:00',
+      minArrivalTime: schedule.minArrivalTime || '',
+      maxArrivalTime: schedule.maxArrivalTime || '',
+      minPrice: schedule.minPrice || '',
+      maxPrice: schedule.maxPrice || '',
+    }
+    handleFindBusTicket(body),
+      this.setState({
+        visibleFilter: false
+      });
   }
 
   handleFilterBus = () => {
@@ -127,6 +207,9 @@ class Schedule extends Component {
           functionVisible={this.handleCloseModal.bind(this)}
           timeZone1={this.handleDepartureTimeZone1.bind(this)}
           timeZone2={this.handleDepartureTimeZone2.bind(this)}
+          showAll={this.handleShowAllBus.bind(this)}
+          under300K={this.handleUnder300K.bind(this)}
+          over300K={this.handleOver300K.bind(this)}
         />
       </Fragment>
     );
