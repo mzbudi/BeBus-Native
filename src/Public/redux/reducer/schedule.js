@@ -29,7 +29,7 @@ const schedule = (state = initialState, action) => {
       if (state.qty === 1) {
         return {
           ...state
-        }
+        };
       } else {
         return {
           ...state,
@@ -75,16 +75,19 @@ const schedule = (state = initialState, action) => {
       };
     case 'GET_BUS_DETAIL_PENDING':
       return {
-        ...state
+        ...state,
+        isLoading: true
       };
     case 'GET_BUS_DETAIL_REJECTED':
       return {
-        ...state
+        ...state,
+        isLoading: false
       };
     case 'GET_BUS_DETAIL_FULFILLED':
       return {
         ...state,
-        busDetail: action.payload
+        busDetail: action.payload,
+        isLoading: false
       };
     default:
       return state;

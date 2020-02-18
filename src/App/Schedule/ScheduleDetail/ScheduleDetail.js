@@ -1,35 +1,24 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, Fragment, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { ListItem, Icon } from 'react-native-elements';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { ListItem } from 'react-native-elements';
 import moment from 'moment';
-
-import { color, WhiteScrollView } from '../../../Public/components/Layout';
-// import { Toast } from '../../../Public/components/Toast';
-
 const el = React.createElement;
 
-const data = {
-  schedule_id: 1,
-  schedule_departure_station_id: 1,
-  schedule_arrival_station_id: 2,
-  schedule_price: 50000,
-  schedule_departure_time: '2020-02-15T05:43:16.000Z',
-  schedule_arrival_time: '2020-02-16T16:43:16.000Z',
-  schedule_bus_id: 1,
-  bus_id: 1,
-  bus_name: 'Harapan Jaya',
-  bus_capacity: 24,
-  schedule_claimed_seats: '1,2,4,1,5,5,6,6'
-};
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
-const RenderSeat = ({
-  maxSelect,
-  layout,
-  dataSeats,
-  selection,
-  handleSelect
-}) => {
+import {
+  color,
+  WhiteScrollView,
+  PrimaryButton
+} from '../../../Public/components/Layout';
+import { Toast } from '../../../Public/components/Toast';
+
+import { actionBookingRequest } from '../../../Public/redux/action/booking';
+import { findBusTicket } from '../../../Public/redux/action/schedule';
+
+const RenderSeat = ({ layout, dataSeats, selection, handleSelect }) => {
   const busLayout = layout.split('-').map(Number);
   const perRow = busLayout.reduce((a, b) => a + b, 0);
   const leftRow = busLayout[0];
@@ -232,98 +221,212 @@ const RenderSeat = ({
   );
 };
 
-class ScheduleDetail extends Component {
-  state = {
-    selection: [],
-    data: {}
-  };
+const ScheduleDetail = props => {
+  const { auth, schedule, bookingRequest } = props;
+  const [selection, setSelection] = useState([]);
 
-  handleSelect = number => {
-    const { selection } = this.state;
+  const handleSelect = number => {
     const newSelection = selection.includes(number)
       ? selection.filter(i => {
           return i !== number;
         })
-      : selection.length < 3
+      : selection.length < props.schedule.qty
       ? [...selection, number]
       : selection;
-    this.setState((prevState, currentState) => {
-      return {
-        selection: [...newSelection]
-      };
-    });
+    setSelection([...newSelection]);
   };
 
-  render() {
-    const { navigation } = this.props;
-    return (
-      <WhiteScrollView>
-        <RenderSeat
-          maxSelect={3}
+  const handleSubmit = async () => {
+    if (auth.data.token) {
+      if (selection.length < 1) {
+        Toast('You must select select your seat numbers');
+      } else {
+        const promises = selection.map(async s => {
+          // console.log(s);
+          const payload = {
+            seat_number: s,
+            user_id: auth.data.user_id,
+            schedule_id: schedule.busDetail.schedule_id
+          };
+          console.log(payload);
+          try {
+            await bookingRequest({ payload });
+          } catch (error) {
+            console.log(error.response);
+          }
+        });
+        await Promise.all(promises);
+      }
+    } else {
+      Toast('You must login to continue.');
+    }
+  };
+
+  // const onSubmit = async () => {
+  //   // const { name, email, phone } = getValues();
+  //   // const payload = {
+  //   //   name,
+  //   //   email,
+  //   //   phone,
+  //   //   ...(userPhoto ? { photo: userPhoto } : {})
+  //   // };
+  //   // try {
+  //   //   await changeContactInfo({ payload, token, id }).then(() => {
+  //   //     Toast('Contact information has been updated.');
+  //   //     navigation.navigate('Account');
+  //   //   });
+  //   // } catch ({ response }) {
+  //   //   networkcheck();
+  //   //   if (response && response.data.error) {
+  //   //     Toast(response.data.error);
+  //   //   }
+  //   // }
+  // };
+  // render() {
+  // const { navigation } = this.props;
+  const { busDetail } = props.schedule;
+  // const { busDetail } = this.props.schedule;
+  const departure =
+    moment(busDetail.schedule_departure_time).format('hh:mmA') +
+    ', ' +
+    busDetail.schedule_departure_station_name;
+  const arrival =
+    moment(busDetail.schedule_arrival_time).format('hh:mmA') +
+    ', ' +
+    busDetail.schedule_arrival_station_name;
+  const departure_date = moment(busDetail.schedule_departure_time).format(
+    'ddd, MMM DD, YYYY'
+  );
+  const departure_time = moment(busDetail.schedule_departure_time).format(
+    'hh:mmA'
+  );
+  const arrival_time = moment(busDetail.schedule_arrival_time).format('hh:mmA');
+
+  return (
+    <WhiteScrollView>
+      {props.schedule.isLoading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <Fragment>
+          <View style={{ padding: 16 }}>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: '#dddddd',
+                borderRadius: 8,
+                overflow: 'hidden'
+              }}>
+              <ListItem
+                containerStyle={styles.listContainer}
+                bottomDivider
+                title={departure_date}
+                rightTitleStyle={{
+                  color: 'red',
+                  fontWeight: 'bold',
+                  fontSize: 14
+                }}
+                rightTitle={busDetail.bus_name}
+                rightContentContainerStyle={styles.listRightContentContainer}
+              />
+              <ListItem
+                containerStyle={styles.listContainer}
+                title={departure_time}
+                titleStyle={{ fontWeight: 'bold' }}
+                contentContainerStyle={styles.listContentContainer}
+                rightTitle={
+                  busDetail.schedule_departure_city_name +
+                  ', ' +
+                  busDetail.schedule_departure_station_name
+                }
+                rightContentContainerStyle={styles.listRightContentContainer}
+              />
+              <ListItem
+                containerStyle={styles.listContainer}
+                titleStyle={{ fontWeight: 'bold' }}
+                bottomDivider
+                title={arrival_time}
+                contentContainerStyle={styles.listContentContainer}
+                rightTitle={
+                  busDetail.schedule_arrival_city_name +
+                  ', ' +
+                  busDetail.schedule_arrival_station_name
+                }
+                rightContentContainerStyle={styles.listRightContentContainer}
+              />
+            </View>
+          </View>
+          <ListItem
+            topDivider
+            bottomDivider
+            title="Price"
+            contentContainerStyle={styles.listContentContainer}
+            rightTitle={busDetail.schedule_price}
+            rightContentContainerStyle={styles.listRightContentContainer}
+          />
+          <ListItem
+            bottomDivider
+            title="Departure"
+            contentContainerStyle={styles.listContentContainer}
+            rightTitle={departure}
+            rightContentContainerStyle={styles.listRightContentContainer}
+          />
+          <ListItem
+            bottomDivider
+            title="Arrival"
+            contentContainerStyle={styles.listContentContainer}
+            rightTitle={arrival}
+            rightContentContainerStyle={styles.listRightContentContainer}
+          />
+          <ListItem
+            containerStyle={styles.listItemContainer}
+            title={
+              <PrimaryButton title="Booking" onPress={() => handleSubmit()} />
+            }
+          />
+          {/*<RenderSeat
           layout="2-2"
-          dataSeats={this.props.schedule.busDetail}
+          dataSeats={busDetail}
           selection={this.state.selection}
           handleSelect={this.handleSelect}
-        />
-        <ListItem
-          bottomDivider
-          title="Price"
-          contentContainerStyle={{
-            borderWidth: 1,
-            flex: 0.3
-          }}
-          rightTitle={data.schedule_price}
-          rightContentContainerStyle={{
-            borderWidth: 1,
-            flex: 0.7,
-            alignItems: 'flex-start'
-          }}
-          onPress={() => navigation.navigate('ContactInfo')}
-        />
-        <ListItem
-          bottomDivider
-          title="Departure"
-          contentContainerStyle={{ borderWidth: 1, flex: 0.3 }}
-          rightTitle={
-            moment(data.schedule_departure_time).format('hh:mma') +
-            ' ' +
-            data.schedule_departure_station_id
-          }
-          rightContentContainerStyle={{
-            borderWidth: 1,
-            flex: 0.7,
-            alignItems: 'flex-start'
-          }}
-          onPress={() => navigation.navigate('ContactInfo')}
-        />
-        <ListItem
-          bottomDivider
-          title="Arrival"
-          contentContainerStyle={{ borderWidth: 1, flex: 0.3 }}
-          rightTitle={
-            moment(data.schedule_arrival_time).format('hh:mma') +
-            ' ' +
-            data.schedule_arrival_station_id
-          }
-          rightContentContainerStyle={{
-            borderWidth: 1,
-            flex: 0.7,
-            alignItems: 'flex-start'
-          }}
-          onPress={() => navigation.navigate('ContactInfo')}
-        />
-      </WhiteScrollView>
-    );
+        />*/}
+          <RenderSeat
+            layout="2-2"
+            dataSeats={busDetail}
+            selection={selection}
+            handleSelect={handleSelect}
+          />
+        </Fragment>
+      )}
+    </WhiteScrollView>
+  );
+  // }
+};
+
+const styles = StyleSheet.create({
+  listContentContainer: {
+    flex: 0.25
+  },
+  listRightContentContainer: {
+    flex: 0.75,
+    alignItems: 'flex-start'
+  },
+  listContainer: {
+    paddingVertical: 8,
+    paddingHorizontal: 16
   }
-}
+});
 
 const mapStateToProps = state => {
   return {
+    auth: state.auth,
     schedule: state.schedule
   };
 };
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  bookingRequest: payload => dispatch(actionBookingRequest(payload)),
+  getBusTicket: payload => dispatch(findBusTicket(payload))
+});
 
 export default connect(
   mapStateToProps,
