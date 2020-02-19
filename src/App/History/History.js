@@ -5,6 +5,7 @@ import { ListItem, Icon } from 'react-native-elements';
 import { actionBookingGet } from '../../Public/redux/action/booking';
 import { networkcheck } from '../../Public/helper/networkcheck';
 import { Toast } from '../../Public/components/Toast';
+import { formatRupiah } from '../../Public/helper/parseprice';
 
 import { color } from '../../Public/components/Layout';
 
@@ -90,7 +91,10 @@ class History extends Component {
                   <Icon name="import-export" type="material" color="green" />
                 }
                 title={`Booking Number : ${item.booking_number}`}
-                subtitle={`Price : ${item.schedule_price}`}
+                subtitle={`Price : ${formatRupiah(
+                  item.schedule_price,
+                  'Rp. '
+                )}`}
                 onPress={() => {
                   navigation.navigate('TripDetail', { item });
                 }}
