@@ -127,8 +127,8 @@ const ContactInfo = props => {
             avatar && avatar !== ''
               ? avatar
               : auth.data.user_photo
-                ? { uri: auth.data.user_photo }
-                : null
+              ? { uri: auth.data.user_photo }
+              : null
           }
           editButton={{
             size: 40,

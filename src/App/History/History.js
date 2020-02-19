@@ -6,71 +6,73 @@ import { actionBookingGet } from '../../Public/redux/action/booking';
 import { networkcheck } from '../../Public/helper/networkcheck';
 import { Toast } from '../../Public/components/Toast';
 
-
 import { color } from '../../Public/components/Layout';
 
 class History extends Component {
   state = {
     refreshing: false
-  }
+  };
   tripDetail = () => {
     this.navigation.navigate('TripDetail');
   };
 
   componentDidMount() {
-    const { getDataBooking, auth } = this.props
+    const { getDataBooking, auth } = this.props;
     if (auth.data.user_id !== undefined || auth.data.user_id) {
       const payload = {
         params: {
           user_id: auth.data.user_id
         }
-      }
+      };
       try {
-        getDataBooking(payload)
+        getDataBooking(payload);
       } catch ({ response }) {
         networkcheck();
         if (response && response.data.error) {
-          Toast(response.data.error)
+          Toast(response.data.error);
         }
       }
-
     }
-
   }
 
   _onRefresh = async () => {
     this.setState({
       refreshing: true
-    })
-    const { getDataBooking, auth } = this.props
+    });
+    const { getDataBooking, auth } = this.props;
     if (auth.data.user_id !== undefined || auth.data.user_id) {
       const payload = {
         params: {
           user_id: auth.data.user_id
         }
-      }
+      };
       try {
         await getDataBooking(payload).then(() => {
           this.setState({
             refreshing: false
-          })
-        })
+          });
+        });
       } catch ({ response }) {
         networkcheck();
         if (response && response.data.error) {
-          Toast(response.data.error)
+          Toast(response.data.error);
         }
       }
     }
-  }
+  };
   render() {
     const { navigation, booking } = this.props;
     return (
       <Fragment>
-        {booking.dataBooking.length === 0 ? <Text></Text> : (
+        {booking.dataBooking.length === 0 ? (
+          <Text />
+        ) : (
           <FlatList
             refreshControl={
-              <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh.bind(this)} />
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh.bind(this)}
+              />
             }
             style={styles.paddingFlatList}
             data={booking.dataBooking}
@@ -96,7 +98,6 @@ class History extends Component {
             )}
           />
         )}
-
       </Fragment>
     );
   }
@@ -135,7 +136,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  getDataBooking: payload => (dispatch(actionBookingGet(payload)))
+  getDataBooking: payload => dispatch(actionBookingGet(payload))
 });
 
 export default connect(
