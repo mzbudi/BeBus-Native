@@ -95,7 +95,7 @@ class SearchStation extends Component {
             }
             style={styles.flatStyle}
             data={station.data}
-            keyExtractor={item => item.station_id}
+            keyExtractor={item => item.station_id.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {

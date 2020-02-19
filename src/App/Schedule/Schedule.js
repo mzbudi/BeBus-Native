@@ -240,9 +240,7 @@ class Schedule extends Component {
               bottomDivider
               chevron={{
                 color: color.Secondary,
-                size: 40,
-                padding: 0,
-                marginVertical: -12
+                size: 40
               }}
               leftIcon={
                 <Icon name="import-export" type="material" color="green" />
