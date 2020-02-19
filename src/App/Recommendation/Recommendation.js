@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
+import { ListItem, Icon } from 'react-native-elements';
 
 class Recommendation extends Component {
   render() {
     return (
       <View>
-        <Text>Recommendation</Text>
+        <ListItem
+          bottomDivider
+          title={<Text style={styles.centered}>Stay Tune !</Text>}
+          subtitle={
+            <Text style={styles.centered}>We Will Be Comming Soon</Text>
+          }
+        />
       </View>
     );
   }
@@ -22,3 +29,10 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Recommendation);
+
+const styles = {
+  centered: {
+    alignSelf: 'center',
+    fontWeight: 'bold'
+  }
+};

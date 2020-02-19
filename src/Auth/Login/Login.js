@@ -30,6 +30,7 @@ const defaultValues = {
 const Login = props => {
   const { auth, loginRequest, navigation } = props;
   const [visible, setVisible] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, setValue, errors, getValues } = useForm({
     defaultValues,
     validationSchema: LoginSchema
@@ -49,6 +50,7 @@ const Login = props => {
 
   const onSubmit = async () => {
     const { username, password } = getValues();
+    setIsLoading(true);
     const payload = {
       username,
       password
@@ -56,12 +58,14 @@ const Login = props => {
     try {
       await loginRequest(payload).then(() => {
         navigation.navigate('Home');
+        setIsLoading(false);
       });
     } catch ({ response }) {
       networkcheck();
       if (response && response.data.error) {
         Toast(response.data.error);
       }
+      setIsLoading(false);
     }
   };
 
@@ -112,7 +116,11 @@ const Login = props => {
         <ListItem
           containerStyle={styles.listItemContainer}
           title={
-            <PrimaryButton title="Login" onPress={handleSubmit(onSubmit)} />
+            <PrimaryButton
+              loading={isLoading}
+              title="Login"
+              onPress={handleSubmit(onSubmit)}
+            />
           }
         />
         <ListDivider />
