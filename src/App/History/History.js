@@ -1,18 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { FlatList, Text } from 'react-native';
+import { FlatList, Text, RefreshControl } from 'react-native';
 import { ListItem, Icon } from 'react-native-elements';
 import { actionBookingGet } from '../../Public/redux/action/booking';
+import { networkcheck } from '../../Public/helper/networkcheck';
+import { Toast } from '../../Public/components/Toast';
 
-const DATA = new Array(10).fill({
-  id: '1',
-  title: '12121',
-  title2: 'Bogor, Branang-Siang'
-});
 
 import { color } from '../../Public/components/Layout';
 
 class History extends Component {
+  state = {
+    refreshing: false
+  }
   tripDetail = () => {
     this.navigation.navigate('TripDetail');
   };
@@ -25,9 +25,43 @@ class History extends Component {
           user_id: auth.data.user_id
         }
       }
-      getDataBooking(payload)
+      try {
+        getDataBooking(payload)
+      } catch ({ response }) {
+        networkcheck();
+        if (response && response.data.error) {
+          Toast(response.data.error)
+        }
+      }
+
     }
 
+  }
+
+  _onRefresh = async () => {
+    this.setState({
+      refreshing: true
+    })
+    const { getDataBooking, auth } = this.props
+    if (auth.data.user_id !== undefined || auth.data.user_id) {
+      const payload = {
+        params: {
+          user_id: auth.data.user_id
+        }
+      }
+      try {
+        await getDataBooking(payload).then(() => {
+          this.setState({
+            refreshing: false
+          })
+        })
+      } catch ({ response }) {
+        networkcheck();
+        if (response && response.data.error) {
+          Toast(response.data.error)
+        }
+      }
+    }
   }
   render() {
     const { navigation, booking } = this.props;
@@ -35,6 +69,9 @@ class History extends Component {
       <Fragment>
         {booking.dataBooking.length === 0 ? <Text></Text> : (
           <FlatList
+            refreshControl={
+              <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh.bind(this)} />
+            }
             style={styles.paddingFlatList}
             data={booking.dataBooking}
             keyExtractor={item => item.booking_id}

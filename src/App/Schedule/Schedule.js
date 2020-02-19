@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, FlatList } from 'react-native';
+import { View, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
 import { Icon, ListItem } from 'react-native-elements';
 import ModalFilterBus from '../../Public/components/ModalFilterBus';
 import ListBus from '../../Public/components/ListBus';
@@ -187,6 +187,9 @@ class Schedule extends Component {
     return (
       <Fragment>
         <FlatList
+          // refreshControl={
+          //   <RefreshControl refreshing={true} />
+          // }
           style={styles.paddingFlatList}
           data={schedule.searchResult}
           keyExtractor={item => item.schedule_id}

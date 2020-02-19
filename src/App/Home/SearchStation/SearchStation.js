@@ -5,7 +5,8 @@ import {
   Text,
   FlatList,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  RefreshControl
 } from 'react-native';
 import styled from 'styled-components';
 import { SearchBar } from 'react-native-elements';
@@ -14,6 +15,8 @@ import {
   addDeparture,
   addArrival
 } from '../../../Public/redux/action/schedule';
+import { networkcheck } from '../../../Public/helper/networkcheck';
+import { Toast } from '../../../Public/components/Toast';
 
 const MainContainer = styled(ScrollView)`
   background-color: #ffffff;
@@ -23,7 +26,8 @@ const MainContainer = styled(ScrollView)`
 
 class SearchStation extends Component {
   state = {
-    search: ''
+    search: '',
+    refreshing: false
   };
   componentDidMount = async () => {
     const { reqStation } = this.props;
@@ -53,10 +57,30 @@ class SearchStation extends Component {
     );
   };
 
+  _onRefresh = async () => {
+    this.setState({
+      refreshing: true
+    })
+    const { reqStation, auth } = this.props
+
+    try {
+      await reqStation().then(() => {
+        this.setState({
+          refreshing: false
+        })
+      })
+    } catch ({ response }) {
+      networkcheck();
+      if (response && response.data.error) {
+        Toast(response.data.error)
+      }
+    }
+  }
+
 
   render() {
     const { station } = this.props;
-    const { search } = this.state;
+    const { search, refreshing } = this.state;
     return (
       <Fragment>
         <SearchBar
@@ -69,28 +93,32 @@ class SearchStation extends Component {
           }}
           value={search}
         />
-        <MainContainer>
-          {station.data ? (
-            <FlatList
-              data={station.data}
-              keyExtractor={item => item.station_id}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    this.handleChoose(item);
-                  }}>
-                  <View>
-                    <Text style={styles.cityName}>{item.city_name}</Text>
-                    <Text>{item.station_name}</Text>
-                    <View style={styles.border} />
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
-          ) : (
-              ''
+
+        {station.data ? (
+          <FlatList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={this._onRefresh.bind(this)} />
+            }
+            style={styles.flatStyle}
+            data={station.data}
+            keyExtractor={item => item.station_id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => {
+                  this.handleChoose(item);
+                }}>
+                <View>
+                  <Text style={styles.cityName}>{item.city_name}</Text>
+                  <Text>{item.station_name}</Text>
+                  <View style={styles.border} />
+                </View>
+              </TouchableOpacity>
             )}
-        </MainContainer>
+          />
+        ) : (
+            ''
+          )}
+
       </Fragment>
     );
   }
@@ -107,7 +135,12 @@ const styles = {
     marginHorizontal: 0,
     marginVertical: 10
   },
-  whiteColor: { backgroundColor: '#ffffff' }
+  whiteColor: { backgroundColor: '#ffffff' },
+  flatStyle: {
+    backgroundColor: '#ffffff',
+    height: '100%',
+    padding: 16,
+  }
 };
 
 const mapStateToProps = state => {

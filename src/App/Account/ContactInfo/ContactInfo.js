@@ -92,7 +92,7 @@ const ContactInfo = props => {
     });
   };
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     const { name, email, phone } = getValues();
     const payload = {
       name,
@@ -101,7 +101,7 @@ const ContactInfo = props => {
       ...(userPhoto ? { photo: userPhoto } : {})
     };
     try {
-      await changeContactInfo({ payload, token, id }).then(() => {
+      changeContactInfo({ payload, token, id }).then(() => {
         Toast('Contact information has been updated.');
         navigation.navigate('Account');
       });
@@ -127,8 +127,8 @@ const ContactInfo = props => {
             avatar && avatar !== ''
               ? avatar
               : auth.data.user_photo
-              ? { uri: auth.data.user_photo }
-              : null
+                ? { uri: auth.data.user_photo }
+                : null
           }
           editButton={{
             size: 40,
