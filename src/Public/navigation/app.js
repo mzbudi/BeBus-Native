@@ -58,7 +58,7 @@ const HomeScreen = createStackNavigator(
     },
     Checkout: {
       screen: Checkout,
-      ...navigationOptions('Checkout')
+      ...navigationOptions('Booking Detail')
     },
     Payment: {
       screen: Payment,

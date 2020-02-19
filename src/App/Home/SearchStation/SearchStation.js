@@ -4,11 +4,9 @@ import {
   View,
   Text,
   FlatList,
-  ScrollView,
   TouchableOpacity,
   RefreshControl
 } from 'react-native';
-import styled from 'styled-components';
 import { SearchBar } from 'react-native-elements';
 import { requestStation } from '../../../Public/redux/action/station';
 import {
@@ -17,12 +15,6 @@ import {
 } from '../../../Public/redux/action/schedule';
 import { networkcheck } from '../../../Public/helper/networkcheck';
 import { Toast } from '../../../Public/components/Toast';
-
-const MainContainer = styled(ScrollView)`
-  background-color: #ffffff;
-  height: 100%;
-  padding: 16px;
-`;
 
 class SearchStation extends Component {
   state = {
@@ -60,23 +52,22 @@ class SearchStation extends Component {
   _onRefresh = async () => {
     this.setState({
       refreshing: true
-    })
-    const { reqStation, auth } = this.props
+    });
+    const { reqStation } = this.props;
 
     try {
       await reqStation().then(() => {
         this.setState({
           refreshing: false
-        })
-      })
+        });
+      });
     } catch ({ response }) {
       networkcheck();
       if (response && response.data.error) {
-        Toast(response.data.error)
+        Toast(response.data.error);
       }
     }
-  }
-
+  };
 
   render() {
     const { station } = this.props;
@@ -97,7 +88,10 @@ class SearchStation extends Component {
         {station.data ? (
           <FlatList
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={this._onRefresh.bind(this)} />
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={this._onRefresh.bind(this)}
+              />
             }
             style={styles.flatStyle}
             data={station.data}
@@ -116,9 +110,8 @@ class SearchStation extends Component {
             )}
           />
         ) : (
-            ''
-          )}
-
+          ''
+        )}
       </Fragment>
     );
   }
@@ -139,7 +132,7 @@ const styles = {
   flatStyle: {
     backgroundColor: '#ffffff',
     height: '100%',
-    padding: 16,
+    padding: 16
   }
 };
 

@@ -10,6 +10,8 @@ import {
 } from '../../Public/components/Layout';
 import { Toast } from '../../Public/components/Toast';
 
+import { formatRupiah } from '../../Public/helper/parseprice';
+
 import { networkcheck } from '../../Public/helper/networkcheck';
 import { actionBookingRequest } from '../../Public/redux/action/booking';
 import {
@@ -31,24 +33,11 @@ const Checkout = props => {
   const handleSubmit = async () => {
     if (auth.data.token) {
       if (selection.length < 1) {
-        Toast('You must select select your seat numbers');
+        Toast('You must select your seat numbers');
       } else {
         await scheduleDetail({ id: schedule.busDetail.schedule_id }).then(
           async ({ value }) => {
             const promises = selection.map(async s => {
-              // console.log(data);
-              // console.log(
-              //   String(schedule.busDetail.claimed_seats)
-              //     .split(',')
-              //     // .map(Number)
-              //     .includes(s.toString())
-              // );
-              // console.log(
-              //   String(schedule.busDetail.claimed_seats)
-              //     .split(',')
-              //     .map(Number)
-              // );
-              // console.log(s);
               if (
                 await String(value.claimed_seats)
                   .split(',')
@@ -132,7 +121,7 @@ const Checkout = props => {
         bottomDivider
         title="Price"
         contentContainerStyle={styles.listContentContainer}
-        rightTitle={schedule.busDetail.schedule_price}
+        rightTitle={formatRupiah(schedule.busDetail.schedule_price, 'Rp. ')}
         rightContentContainerStyle={styles.listRightContentContainer}
       />
       <ListItem
@@ -148,13 +137,16 @@ const Checkout = props => {
         bottomDivider
         title="Total"
         contentContainerStyle={styles.listContentContainer}
-        rightTitle={schedule.busDetail.schedule_price * selection.length}
+        rightTitle={formatRupiah(
+          schedule.busDetail.schedule_price * selection.length,
+          'Rp. '
+        )}
         rightContentContainerStyle={styles.listRightContentContainer}
       />
       <ListItem
         containerStyle={styles.listItemContainer}
         title={
-          <PrimaryButton title="Continue" onPress={() => handleSubmit()} />
+          <PrimaryButton title="Checkout" onPress={() => handleSubmit()} />
         }
       />
     </WhiteScrollView>

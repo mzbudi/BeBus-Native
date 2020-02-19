@@ -5,12 +5,10 @@ import { requestStation } from '../../../Public/redux/action/station';
 import moment from 'moment';
 
 class TripDetail extends Component {
-
   componentDidMount() {
-    const { getDataStation, navigation } = this.props
-    getDataStation()
+    const { getDataStation } = this.props;
+    getDataStation();
   }
-
 
   formatRupiah = (angka, prefix) => {
     let number_string = angka.toString().replace(/[^,\d]/g, '');
@@ -28,15 +26,21 @@ class TripDetail extends Component {
     return prefix === undefined ? rupiah : rupiah ? 'Rp. ' + rupiah : '';
   };
   render() {
-    const { navigation, station } = this.props
-    const stationDepart = navigation.state.params.item.schedule_departure_station_id;
-    const stationArrival = navigation.state.params.item.schedule_arrival_station_id;
+    const { navigation } = this.props;
+    const stationDepart =
+      navigation.state.params.item.schedule_departure_station_id;
+    const stationArrival =
+      navigation.state.params.item.schedule_arrival_station_id;
     return (
       <View style={styles.containerFlex}>
         <View style={styles.flex1}>
           <View style={styles.rowFlexer}>
-            <Text style={styles.fontBold}>Booking Number :{navigation.state.params.item.booking_number}</Text>
-            <Text style={styles.fontBold}>Seat Number :{navigation.state.params.item.booking_seat_number}</Text>
+            <Text style={styles.fontBold}>
+              Booking Number :{navigation.state.params.item.booking_number}
+            </Text>
+            <Text style={styles.fontBold}>
+              Seat Number :{navigation.state.params.item.booking_seat_number}
+            </Text>
           </View>
           <View style={styles.borderBold} />
           <View style={styles.dataFlexer}>
@@ -51,12 +55,15 @@ class TripDetail extends Component {
                       <Text>City : {item.city_name}</Text>
                       <Text>Station : {item.station_name}</Text>
                     </Fragment>
-                  )
+                  );
                 }
               })}
-              <Text>Date : {moment(navigation.state.params.item.schedule_departure_time).format(
-                'ddd, MMM DD, YYYY'
-              )}{' '}</Text>
+              <Text>
+                Date :{' '}
+                {moment(
+                  navigation.state.params.item.schedule_departure_time
+                ).format('ddd, MMM DD, YYYY')}{' '}
+              </Text>
             </View>
           </View>
           <View style={styles.border} />
@@ -72,12 +79,15 @@ class TripDetail extends Component {
                       <Text>City : {item.city_name}</Text>
                       <Text>Station : {item.station_name}</Text>
                     </Fragment>
-                  )
+                  );
                 }
               })}
-              <Text>Date : {moment(navigation.state.params.item.schedule_arrival_time).format(
-                'ddd, MMM DD, YYYY'
-              )}{' '}</Text>
+              <Text>
+                Date :{' '}
+                {moment(
+                  navigation.state.params.item.schedule_arrival_time
+                ).format('ddd, MMM DD, YYYY')}{' '}
+              </Text>
             </View>
           </View>
           <View style={styles.border} />
@@ -88,9 +98,12 @@ class TripDetail extends Component {
             </View>
             <View>
               <Text style={styles.fontBold}>
-                Rp. {this.formatRupiah(navigation.state.params.item.schedule_price)}
+                Rp.{' '}
+                {this.formatRupiah(navigation.state.params.item.schedule_price)}
               </Text>
-              <Text style={styles.fontBold}>{navigation.state.params.item.booking_status}</Text>
+              <Text style={styles.fontBold}>
+                {navigation.state.params.item.booking_status}
+              </Text>
             </View>
           </View>
         </View>
@@ -144,13 +157,12 @@ const mapStateToProps = state => {
   return {
     auth: state.auth,
     booking: state.booking,
-    station: state.station,
     station: state.station
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  getDataStation: () => (dispatch(requestStation()))
+  getDataStation: () => dispatch(requestStation())
 });
 
 export default connect(

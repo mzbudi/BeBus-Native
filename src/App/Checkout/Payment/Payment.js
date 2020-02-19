@@ -1,11 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { Toast } from '../../../Public/components/Toast';
 
 const Payment = props => {
   const { navigation } = props;
-  return <WebView source={{ uri: navigation.state.params.paymentUrl }} />;
+
+  const handleWebViewNavigationStateChange = newNavState => {
+    const { url } = newNavState;
+    if (url.includes('payment/success?status_code=200')) {
+      Toast('Payment success.');
+      navigation.navigate('History');
+    }
+  };
+
+  return (
+    <WebView
+      source={{ uri: navigation.state.params.paymentUrl }}
+      onNavigationStateChange={handleWebViewNavigationStateChange}
+    />
+  );
 };
 
 const mapStateToProps = state => {
