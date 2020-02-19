@@ -8,10 +8,16 @@ import {
   findBusTicket,
   getBusDetail
 } from '../../Public/redux/action/schedule';
-
+import { networkcheck } from '../../Public/helper/networkcheck';
+import { Toast } from '../../Public/components/Toast';
 import { color } from '../../Public/components/Layout';
 
 class Schedule extends Component {
+  state = {
+    refreshing: false,
+    visibleFilter: false
+  };
+
   static navigationOptions = ({ navigation }) => {
     return {
       headerRight: () => {
@@ -25,7 +31,7 @@ class Schedule extends Component {
                 name="filter-list"
                 size={35}
                 type="material"
-                color="black"
+                color="#fffff"
               />
             </View>
           </TouchableOpacity>
@@ -34,12 +40,11 @@ class Schedule extends Component {
     };
   };
 
-  state = {
-    visibleFilter: false
-  };
-
-  handleShowAllBus = () => {
-    const { schedule, handleFindBusTicket } = this.props
+  _onRefresh = async () => {
+    this.setState({
+      refreshing: true
+    });
+    const { handleFindBusTicket, schedule } = this.props;
     const body = {
       date: schedule.date || '',
       departureCity: schedule.departureCity || '',
@@ -50,17 +55,47 @@ class Schedule extends Component {
       minArrivalTime: '',
       maxArrivalTime: '',
       minPrice: '',
-      maxPrice: '',
-    }
-    console.log(body)
-    handleFindBusTicket(body),
-      this.setState({
-        visibleFilter: false
+      maxPrice: ''
+    };
+    try {
+      await handleFindBusTicket(body).then(() => {
+        this.setState({
+          refreshing: false
+        });
       });
-  }
+    } catch ({ response }) {
+      networkcheck();
+      if (response && response.data.error) {
+        Toast(response.data.error);
+      }
+      this.setState({
+        refreshing: false
+      });
+    }
+  };
+
+  handleShowAllBus = () => {
+    const { schedule, handleFindBusTicket } = this.props;
+    const body = {
+      date: schedule.date || '',
+      departureCity: schedule.departureCity || '',
+      arrivalCity: schedule.arrivalCity || '',
+      minAvailableSeats: schedule.minAvailableSeats || '',
+      minDepartureTime: '',
+      maxDepartureTime: '',
+      minArrivalTime: '',
+      maxArrivalTime: '',
+      minPrice: '',
+      maxPrice: ''
+    };
+    handleFindBusTicket(body);
+    this.setState({
+      visibleFilter: false
+    });
+  };
 
   handleUnder300K = () => {
-    const { schedule, handleFindBusTicket } = this.props
+    const { schedule, handleFindBusTicket } = this.props;
     const body = {
       date: schedule.date || '',
       departureCity: schedule.departureCity || '',
@@ -71,16 +106,16 @@ class Schedule extends Component {
       minArrivalTime: schedule.minArrivalTime || '',
       maxArrivalTime: schedule.maxArrivalTime || '',
       minPrice: '',
-      maxPrice: '300000',
-    }
-    handleFindBusTicket(body),
-      this.setState({
-        visibleFilter: false
-      });
-  }
+      maxPrice: '300000'
+    };
+    handleFindBusTicket(body);
+    this.setState({
+      visibleFilter: false
+    });
+  };
 
   handleOver300K = () => {
-    const { schedule, handleFindBusTicket } = this.props
+    const { schedule, handleFindBusTicket } = this.props;
     const body = {
       date: schedule.date || '',
       departureCity: schedule.departureCity || '',
@@ -91,13 +126,13 @@ class Schedule extends Component {
       minArrivalTime: schedule.minArrivalTime || '',
       maxArrivalTime: schedule.maxArrivalTime || '',
       minPrice: '300000',
-      maxPrice: '',
-    }
-    handleFindBusTicket(body),
-      this.setState({
-        visibleFilter: false
-      });
-  }
+      maxPrice: ''
+    };
+    handleFindBusTicket(body);
+    this.setState({
+      visibleFilter: false
+    });
+  };
 
   handleDepartureTimeZone1 = () => {
     const { schedule, handleFindBusTicket } = this.props;
@@ -113,31 +148,31 @@ class Schedule extends Component {
       minPrice: schedule.minPrice || '',
       maxPrice: schedule.maxPrice || ''
     };
-    handleFindBusTicket(body),
-      this.setState({
-        visibleFilter: false
-      });
+    handleFindBusTicket(body);
+    this.setState({
+      visibleFilter: false
+    });
   };
 
   handleDepartureTimeZone1 = () => {
-    const { schedule, handleFindBusTicket } = this.props
+    const { schedule, handleFindBusTicket } = this.props;
     const body = {
       date: schedule.date || '',
       departureCity: schedule.departureCity || '',
       arrivalCity: schedule.arrivalCity || '',
       minAvailableSeats: schedule.minAvailableSeats || '',
-      minDepartureTime: '00:00',
+      minDepartureTime: '06:00',
       maxDepartureTime: '12:00',
       minArrivalTime: schedule.minArrivalTime || '',
       maxArrivalTime: schedule.maxArrivalTime || '',
       minPrice: schedule.minPrice || '',
-      maxPrice: schedule.maxPrice || '',
-    }
-    handleFindBusTicket(body),
-      this.setState({
-        visibleFilter: false
-      });
-  }
+      maxPrice: schedule.maxPrice || ''
+    };
+    handleFindBusTicket(body);
+    this.setState({
+      visibleFilter: false
+    });
+  };
 
   handleDepartureTimeZone2 = () => {
     const { schedule, handleFindBusTicket } = this.props;
@@ -153,10 +188,10 @@ class Schedule extends Component {
       minPrice: schedule.minPrice || '',
       maxPrice: schedule.maxPrice || ''
     };
-    handleFindBusTicket(body),
-      this.setState({
-        visibleFilter: false
-      });
+    handleFindBusTicket(body);
+    this.setState({
+      visibleFilter: false
+    });
   };
 
   handleFilterBus = () => {
@@ -182,14 +217,17 @@ class Schedule extends Component {
   }
 
   render() {
-    const { visibleFilter } = this.state;
+    const { visibleFilter, refreshing } = this.state;
     const { schedule } = this.props;
     return (
       <Fragment>
         <FlatList
-          // refreshControl={
-          //   <RefreshControl refreshing={true} />
-          // }
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          }
           style={styles.paddingFlatList}
           data={schedule.searchResult}
           keyExtractor={item => item.schedule_id}

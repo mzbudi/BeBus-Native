@@ -37,7 +37,6 @@ const decrementData = () => {
 };
 
 const findBusTicket = payload => {
-  console.log(payload);
   const config = {
     // headers: payload.headers,
     params: {
