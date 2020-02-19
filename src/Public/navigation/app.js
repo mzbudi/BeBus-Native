@@ -16,6 +16,8 @@ import Recommendation from '../../App/Recommendation';
 import SearchStation from '../../App/Home/SearchStation';
 import TripDetail from '../../App/History/TripDetail';
 import ScheduleDetail from '../../App/Schedule/ScheduleDetail';
+import Checkout from '../../App/Checkout';
+import Payment from '../../App/Checkout/Payment';
 
 import Login from '../../Auth/Login';
 import Register from '../../Auth/Register';
@@ -53,6 +55,16 @@ const HomeScreen = createStackNavigator(
     ScheduleDetail: {
       screen: ScheduleDetail,
       ...navigationOptions('Schedule Detail')
+    },
+    Checkout: {
+      screen: Checkout,
+      ...navigationOptions('Checkout')
+    },
+    Payment: {
+      screen: Payment,
+      navigationOptions: {
+        headerShown: false
+      }
     }
   },
   {
