@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import { ListItem } from 'react-native-elements';
@@ -29,11 +29,14 @@ const Checkout = props => {
     scheduleDetail
   } = props;
   const { selection } = navigation.state.params;
+  const [actionLoading, setActionLoading] = useState(false);
 
   const handleSubmit = async () => {
+    setActionLoading(true);
     if (auth.data.token) {
       if (selection.length < 1) {
         Toast('You must select your seat numbers');
+        setActionLoading(false);
       } else {
         await scheduleDetail({ id: schedule.busDetail.schedule_id }).then(
           async ({ value }) => {
@@ -45,6 +48,7 @@ const Checkout = props => {
                   .includes(s.toString())
               ) {
                 Toast('Seat is not available.');
+                setActionLoading(false);
               } else {
                 const payload = {
                   seat_number: s,
@@ -59,13 +63,14 @@ const Checkout = props => {
                     navigation.navigate('Payment', {
                       paymentUrl: data.value.paymentUrl
                     });
+                    setActionLoading(false);
                   });
-                } catch (error) {
-                  console.log(error);
+                } catch ({ response }) {
                   networkcheck();
                   if (response && response.error) {
                     Toast(response.error);
                   }
+                  setActionLoading(false);
                 }
               }
             });
@@ -75,6 +80,7 @@ const Checkout = props => {
       }
     } else {
       Toast('You must login to continue.');
+      setActionLoading(false);
     }
   };
 
@@ -146,7 +152,12 @@ const Checkout = props => {
       <ListItem
         containerStyle={styles.listItemContainer}
         title={
-          <PrimaryButton title="Checkout" onPress={() => handleSubmit()} />
+          <PrimaryButton
+            disabled={actionLoading}
+            loading={actionLoading}
+            title="Checkout"
+            onPress={() => handleSubmit()}
+          />
         }
       />
     </WhiteScrollView>

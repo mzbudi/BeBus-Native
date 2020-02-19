@@ -36,10 +36,21 @@ const booking = (state = initialState, action) => {
         isLoading: false,
         dataBookingID: action.payload
       };
+    case 'BOOKING_REQUEST_PENDING':
+      return {
+        ...state,
+        isLoading: true
+      };
+    case 'BOOKING_REQUEST_REJECTED':
+      return {
+        ...state,
+        isLoading: false
+      };
     case 'BOOKING_REQUEST_FULFILLED':
       return {
         ...state,
-        booking: action.payload
+        booking: action.payload,
+        isLoading: false
       };
     default:
       return state;

@@ -1,6 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator
+} from 'react-native';
 import { ListItem } from 'react-native-elements';
 import moment from 'moment';
 const el = React.createElement;
@@ -139,22 +145,23 @@ const RenderSeat = ({ layout, dataSeats, selection, handleSelect }) => {
           ]
         )
       ]),
-      seatStatus.map((row, i) => {
+      seatStatus.map((row, iRow) => {
         return el(
           View,
           {
-            key: i,
+            key: iRow.toString(),
             style: {
               flex: 1,
               flexDirection: 'row'
             }
           },
-          row.map(seat => {
+          row.map((seat, iSeat) => {
+            // console.log(iRow + '-' + iSeat);
             return [
               el(
                 View,
                 {
-                  key: seat,
+                  key: iRow + '-' + iSeat,
                   style: {
                     flex: 1 / (perRow + 1)
                   }
@@ -225,6 +232,7 @@ const RenderSeat = ({ layout, dataSeats, selection, handleSelect }) => {
 const ScheduleDetail = props => {
   const { auth, schedule, navigation, getBusTicket } = props;
   const [selection, setSelection] = useState([]);
+  const [actionLoading, setActionLoading] = useState(false);
 
   const handleSelect = number => {
     const newSelection = selection.includes(number)
@@ -238,9 +246,11 @@ const ScheduleDetail = props => {
   };
 
   const handleSubmit = async () => {
+    setActionLoading(true);
     if (auth.data.token) {
       if (selection.length < 1) {
         Toast('You must select your seat numbers');
+        setActionLoading(false);
       } else {
         try {
           await getBusTicket({}).then(async ({}) => {
@@ -252,18 +262,22 @@ const ScheduleDetail = props => {
                   .includes(s)
               ) {
                 Toast('Seat is not available.');
+                setActionLoading(false);
               } else {
                 navigation.navigate('Checkout', { selection });
+                setActionLoading(false);
               }
             });
             await Promise.all(promises);
           });
         } catch (error) {
           networkcheck();
+          setActionLoading(false);
         }
       }
     } else {
       Toast('You must login to continue.');
+      setActionLoading(false);
     }
   };
 
@@ -284,8 +298,12 @@ const ScheduleDetail = props => {
   );
   const arrival_time = moment(busDetail.schedule_arrival_time).format('hh:mmA');
 
-  return props.schedule.isLoading ? (
-    <Text>Loading...</Text>
+  return schedule.isLoading ? (
+    <View style={styles.padding10}>
+      <View style={styles.padding10}>
+        <ActivityIndicator size="large" color={color.Primary} />
+      </View>
+    </View>
   ) : (
     <Fragment>
       <WhiteScrollView>
@@ -382,6 +400,8 @@ const ScheduleDetail = props => {
           containerStyle={styles.listItemContainer}
           title={
             <PrimaryButton
+              disabled={actionLoading}
+              loading={actionLoading}
               title="Continue Booking"
               onPress={() => handleSubmit()}
             />

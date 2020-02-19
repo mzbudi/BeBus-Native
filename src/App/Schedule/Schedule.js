@@ -31,7 +31,7 @@ class Schedule extends Component {
                 name="filter-list"
                 size={35}
                 type="material"
-                color="#fffff"
+                color={color.TextSecondary}
               />
             </View>
           </TouchableOpacity>
@@ -230,7 +230,7 @@ class Schedule extends Component {
           }
           style={styles.paddingFlatList}
           data={schedule.searchResult}
-          keyExtractor={item => item.schedule_id}
+          keyExtractor={item => item.schedule_id.toString()}
           renderItem={({ item }) => (
             <ListItem
               onPress={() => {
