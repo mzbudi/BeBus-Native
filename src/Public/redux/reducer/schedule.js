@@ -15,10 +15,20 @@ const schedule = (state = initialState, action) => {
         ...state,
         departureData: action.payload
       };
+    case 'RESET_DEPARTURE':
+      return {
+        ...state,
+        departureData: []
+      };
     case 'ADD_ARRIVAL':
       return {
         ...state,
         arrivalData: action.payload
+      };
+    case 'RESET_ARRIVAL':
+      return {
+        ...state,
+        arrivalData: []
       };
     case 'INCREMENT_DATA':
       return {
@@ -88,6 +98,10 @@ const schedule = (state = initialState, action) => {
         ...state,
         busDetail: action.payload,
         isLoading: false
+      };
+    case 'RESET_SCHEDULE':
+      return {
+        ...initialState
       };
     default:
       return state;

@@ -8,6 +8,7 @@ import {
   RefreshControl
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import { color } from '../../../Public/components/Layout';
 import { requestStation } from '../../../Public/redux/action/station';
 import {
   addDeparture,
@@ -21,9 +22,53 @@ class SearchStation extends Component {
     search: '',
     refreshing: false
   };
+
+  static navigationOptions = ({ navigation }) => {
+    if (navigation.state.params.textParams === 'Departure') {
+      return {
+        headerRight: () => {
+          return (
+            <Text
+              style={styles.headerRightText}
+              onPress={() => navigation.state.params.handleResetDeparture()}>
+              Reset
+            </Text>
+          );
+        }
+      };
+    } else {
+      return {
+        headerRight: () => {
+          return (
+            <Text
+              style={styles.headerRightText}
+              onPress={() => navigation.state.params.handleResetArrival()}>
+              Reset
+            </Text>
+          );
+        }
+      };
+    }
+  };
+
   componentDidMount = async () => {
-    const { reqStation } = this.props;
+    const {
+      navigation,
+      reqStation,
+      resetArrivalData,
+      resetDepartureData
+    } = this.props;
     await reqStation();
+    navigation.setParams({
+      handleResetArrival: () => {
+        resetArrivalData();
+        navigation.navigate('Home');
+      },
+      handleResetDeparture: () => {
+        resetDepartureData();
+        navigation.navigate('Home');
+      }
+    });
   };
 
   handleChoose = item => {
@@ -133,6 +178,11 @@ const styles = {
     backgroundColor: '#ffffff',
     height: '100%',
     padding: 16
+  },
+  headerRightText: {
+    color: color.TextSecondary,
+    fontSize: 16,
+    marginHorizontal: 16
   }
 };
 
@@ -145,7 +195,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   reqStation: payload => dispatch(requestStation(payload)),
   addDepartureData: payload => dispatch(addDeparture(payload)),
-  addArrivalData: payload => dispatch(addArrival(payload))
+  addArrivalData: payload => dispatch(addArrival(payload)),
+  resetArrivalData: () => dispatch({ type: 'RESET_ARRIVAL' }),
+  resetDepartureData: () => dispatch({ type: 'RESET_DEPARTURE' })
 });
 
 export default connect(

@@ -9,6 +9,8 @@ import { actionLogoutRequest } from '../../Public/redux/action/auth';
 
 class Account extends Component {
   handleLogout = () => {
+    this.props.resetBooking();
+    this.props.resetSchedule();
     this.props.logoutRequest();
     this.props.navigation.navigate('Auth');
   };
@@ -143,7 +145,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  logoutRequest: () => dispatch(actionLogoutRequest())
+  logoutRequest: () => dispatch(actionLogoutRequest()),
+  resetBooking: () => dispatch({ type: 'RESET_BOOKING' }),
+  resetSchedule: () => dispatch({ type: 'RESET_SCHEDULE' })
 });
 
 export default connect(

@@ -52,6 +52,10 @@ const booking = (state = initialState, action) => {
         booking: action.payload,
         isLoading: false
       };
+    case 'RESET_BOOKING':
+      return {
+        ...initialState
+      };
     default:
       return state;
   }
