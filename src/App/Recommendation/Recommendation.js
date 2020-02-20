@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
-import { ListItem, Icon } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
 
 class Recommendation extends Component {
   render() {

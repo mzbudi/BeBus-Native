@@ -7,7 +7,7 @@ const actionBookingRequest = ({ token, payload }) => {
   const body = qs.stringify(payload);
   return {
     type: 'BOOKING_REQUEST',
-    payload: axios.post(`${API_HOST}/booking`, body).then(({ data }) => {
+    payload: axios.post(`${API_HOST}/booking`, body, token).then(({ data }) => {
       return data.data;
     })
   };

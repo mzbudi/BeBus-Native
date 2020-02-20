@@ -20,7 +20,11 @@ class History extends Component {
   componentDidMount() {
     const { getDataBooking, auth } = this.props;
     if (auth.data.user_id !== undefined || auth.data.user_id) {
+      const headers = {
+        authorization: auth.data.token
+      };
       const payload = {
+        headers,
         params: {
           user_id: auth.data.user_id
         }
@@ -42,7 +46,11 @@ class History extends Component {
     });
     const { getDataBooking, auth } = this.props;
     if (auth.data.user_id !== undefined || auth.data.user_id) {
+      const headers = {
+        authorization: auth.data.token
+      };
       const payload = {
+        headers,
         params: {
           user_id: auth.data.user_id
         }

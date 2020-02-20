@@ -50,6 +50,11 @@ const Checkout = props => {
                 Toast('Seat is not available.');
                 setActionLoading(false);
               } else {
+                const token = {
+                  headers: {
+                    authorization: auth.data.token
+                  }
+                };
                 const payload = {
                   seat_number: s,
                   user_id: auth.data.user_id,
@@ -57,7 +62,7 @@ const Checkout = props => {
                 };
                 navigation.navigate('Checkout', { selection });
                 try {
-                  await bookingRequest({ payload }).then(async data => {
+                  await bookingRequest({ token, payload }).then(async data => {
                     await getBusTicket({ minAvailableSeats: schedule.qty });
                     Toast('Booking success.');
                     navigation.navigate('Payment', {
