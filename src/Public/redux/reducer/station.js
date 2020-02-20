@@ -8,7 +8,7 @@ const station = (state = initialState, action) => {
     case 'GET_STATION_PENDING':
       return {
         ...state,
-        isLoading: false
+        isLoading: true
       };
     case 'GET_STATION_REJECTED':
       return {

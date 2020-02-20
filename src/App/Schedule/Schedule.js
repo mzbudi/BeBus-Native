@@ -1,6 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  FlatList,
+  RefreshControl,
+  ActivityIndicator
+} from 'react-native';
 import { Icon, ListItem } from 'react-native-elements';
 import ModalFilterBus from '../../Public/components/ModalFilterBus';
 import ListBus from '../../Public/components/ListBus';
@@ -219,7 +225,13 @@ class Schedule extends Component {
   render() {
     const { visibleFilter, refreshing } = this.state;
     const { schedule } = this.props;
-    return (
+    return schedule.isLoading ? (
+      <View style={styles.padding10}>
+        <View style={styles.padding10}>
+          <ActivityIndicator size="large" color={color.Primary} />
+        </View>
+      </View>
+    ) : (
       <Fragment>
         <FlatList
           refreshControl={
@@ -276,7 +288,10 @@ const styles = {
   },
   whiteColor: { backgroundColor: '#ffffff' },
   iconFilter: { right: 16 },
-  fontBold: { fontWeight: 'bold' }
+  fontBold: { fontWeight: 'bold' },
+  padding10: {
+    padding: 10
+  }
 };
 
 const mapStateToProps = state => {

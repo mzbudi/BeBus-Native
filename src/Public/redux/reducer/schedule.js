@@ -54,7 +54,7 @@ const schedule = (state = initialState, action) => {
     case 'FIND_BUS_PENDING':
       return {
         ...state,
-        isLoading: false
+        isLoading: true
       };
     case 'FIND_BUS_REJECTED':
       return {
@@ -70,7 +70,7 @@ const schedule = (state = initialState, action) => {
     case 'MINMAX_DEPART_PENDING':
       return {
         ...state,
-        isLoading: false
+        isLoading: true
       };
     case 'MINMAX_DEPART_REJECTED':
       return {

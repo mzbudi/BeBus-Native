@@ -5,7 +5,8 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  RefreshControl
+  RefreshControl,
+  ActivityIndicator
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { color } from '../../../Public/components/Layout';
@@ -117,7 +118,13 @@ class SearchStation extends Component {
   render() {
     const { station } = this.props;
     const { search, refreshing } = this.state;
-    return (
+    return station.isLoading ? (
+      <View style={styles.padding10}>
+        <View style={styles.padding10}>
+          <ActivityIndicator size="large" color={color.Primary} />
+        </View>
+      </View>
+    ) : (
       <Fragment>
         <SearchBar
           placeholder="Search City or Station..."
@@ -183,6 +190,9 @@ const styles = {
     color: color.TextSecondary,
     fontSize: 16,
     marginHorizontal: 16
+  },
+  padding10: {
+    padding: 10
   }
 };
 

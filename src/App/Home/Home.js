@@ -53,7 +53,8 @@ const ListDivider = styled(View)`
 class Home extends Component {
   state = {
     calendarVisible: false,
-    date: null
+    date: null,
+    actionLoading: false
   };
   componentDidMount() {
     SplashScreen.hide();
@@ -92,6 +93,9 @@ class Home extends Component {
   };
 
   handleFindBus = () => {
+    this.setState({
+      actionLoading: true
+    });
     // this.props.navigation.navigate('Schedule');
     const { handleFindBusTicket, navigation } = this.props;
     const { schedule } = this.props;
@@ -102,6 +106,9 @@ class Home extends Component {
       minAvailableSeats: schedule.qty
     };
     handleFindBusTicket(body);
+    this.setState({
+      actionLoading: false
+    });
     navigation.navigate('Schedule');
   };
 
@@ -246,6 +253,7 @@ class Home extends Component {
                   containerStyle={styles.padding0}
                   title={
                     <PrimaryButton
+                      loading={this.state.actionLoading}
                       onPress={() => {
                         this.handleFindBus();
                       }}
